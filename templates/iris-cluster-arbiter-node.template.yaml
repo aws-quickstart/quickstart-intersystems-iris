@@ -1,0 +1,113 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Metadata:
+    Author: Anton Umnikov
+    Last Updated: April 6, 2020
+    Description: IRIS Arbiter Node
+
+Parameters:
+  #VpcIdParameter:
+  #  Description: Launch EC2 instances in this VPC
+  #  Default: vpc-029aba04d6dbcfae4
+  #  Type: AWS::EC2::VPC::Id
+  InstanceSubnetIdParameter:
+    Description: Launch EC2 instances in this subnet
+    Default: subnet-024ee9bc8ba573050
+    Type: AWS::EC2::Subnet::Id
+  InstanceSecurityGroupParameter:
+    Description:  Security group for the instance
+    Type: AWS::EC2::SecurityGroup::Id
+  SshKeyParameter:
+    Description: SSH Keypair to login to the instance
+    Default: anton-isc
+    Type: AWS::EC2::KeyPair::KeyName
+  IamInstanceProfileParameter:
+    Description: IAM instance role for EC2 instances 
+    Default: S3FullAccessForEC2
+    Type: String
+  S3BucketNameParameter:
+    Description: S3 Bucket with IRIS binaries
+    Type: String
+    Default: asia-pac-training-2019
+  InstanceTypeParameter:
+    Description: Cluster node instance type
+    Type: String
+    Default: t3.small
+    AllowedValues: 
+      - t3.small
+      - t3.large
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+  MirrorInstanceRole:
+    Description: Cluster node instance role
+    Type: String
+    Default: ARBITER
+    AllowedValues: 
+      - NONE
+      - PRIMARY
+      - FAILOVER
+      - ASYNC
+      - ARBITER      
+
+Resources:
+  ##Node Start##         
+  NodeInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      Tags: 
+        - 
+          Key: Name
+          Value: !Sub "${AWS::StackName}-IRIS"
+      ImageId: !Ref LatestAmiId
+        #Fn::FindInMap:
+        #- RegionMap
+        #- Ref: AWS::Region
+        #- AMIx64
+      InstanceType: !Ref InstanceTypeParameter
+      KeyName: !Ref SshKeyParameter
+      IamInstanceProfile: !Ref IamInstanceProfileParameter
+      SecurityGroupIds:
+        - !Ref InstanceSecurityGroupParameter
+      SubnetId: !Ref InstanceSubnetIdParameter
+      UserData:
+        Fn::Base64:
+         Fn::Sub:
+         - |
+           #!/usr/bin/env bash
+           DISTR=ISCAgent-2020.1.0.215.0-lnxrhx64
+           BUCKET=${ConfigS3BucketName}
+           INSTANCEROLE=${MirrorInstanceRole}
+           set -o errexit
+           yum update -y
+           mkdir /tmp/irisdistr
+           cd /tmp/irisdistr
+           aws s3 cp s3://$BUCKET/$DISTR.tar.gz .
+           tar -xvf $DISTR.tar.gz
+           cd $DISTR
+           ./agentinstall << END
+           1
+           yes
+           END
+           cd ..
+           sudo systemctl daemon-reload
+           sudo systemctl enable ISCAgent.service
+           sudo systemctl start ISCAgent.service
+         - {
+           ConfigS3BucketName: !Ref S3BucketNameParameter,
+           MirrorInstanceRole: !Ref MirrorInstanceRole
+           }
+  ##Node End##          
+
+Outputs:
+  NodePublicIP:
+    Description: Node PublicIP
+    Value: !Join
+      - ''
+      - ['', !GetAtt NodeInstance.PublicIp, '']
+  NodePrivateIP:
+    Description: Node PrivateIP
+    Value: !Join
+      - ''
+      - ['', !GetAtt NodeInstance.PrivateIp, '']
+ 
