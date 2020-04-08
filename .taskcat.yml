@@ -14,5 +14,7 @@ tests:
       InstanceTypeParameter: m5.large
       RemoteAccessCIDRParameter: 0.0.0.0/0
       S3BucketNameParameter: asia-pac-training-2019
-      SshKeyParameter: anton-isc
+      SshKeyParameter: $[alfred_getkeypair]
       VpcIdParameter: vpc-029aba04d6dbcfae4
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]

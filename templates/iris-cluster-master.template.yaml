@@ -92,11 +92,28 @@ Parameters:
       - r5.2xlarge
       - r5.4xlarge
       - r5.8xlarge
+
+  QSS3BucketName:
+    AllowedPattern: "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*[^/]$"
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-) but should not end with forward slash (/)
+    Default: aws-quickstart
+    Description: S3 bucket name for the Quick Start HANA-HA assets.
+    Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: 'The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.'
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: "^[0-9a-zA-Z-/]*[^/]$"
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/) but should not end with forward slash (/).
+    Default: quickstart-intersystems-iris
+    Description: S3 key prefix for the Quick Start HANA-HA assets.
+    Type: String
 Resources:
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Allow all hosts in this group to access each other on port 80
+      GroupDescription: Allow all hosts in this group to access each other 
       GroupName: !Sub "${AWS::StackName}-IRIS-SG"
       VpcId: !Ref VpcIdParameter
   SecurityGroupIngressSSH:
@@ -163,8 +180,9 @@ Resources:
         InstanceTypeParameter: !Ref InstanceTypeParameter
         MirrorInstanceRole: PRIMARY
         MirrorArbiterIP: !GetAtt 'Arbiter.Outputs.NodePrivateIP'
-      TemplateURL: https://isc-tech-validation.s3.amazonaws.com/MirrorNode.yaml
-      #TimeoutInMinutes: '5'
+      TemplateURL: !Sub https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/iris-cluster-iris-node.template.yaml
+      #https://isc-tech-validation.s3.amazonaws.com/MirrorNode.yaml
+      
   Node02:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -179,8 +197,8 @@ Resources:
         InstanceTypeParameter: !Ref InstanceTypeParameter
         MirrorInstanceRole: FAILOVER
         MirrorPrimaryIP: !GetAtt 'Node01.Outputs.NodePrivateIP'
-      TemplateURL: https://isc-tech-validation.s3.amazonaws.com/MirrorNode.yaml
-      #TimeoutInMinutes: '5'
+      TemplateURL: !Sub https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/iris-cluster-iris-node.template.yaml
+      #https://isc-tech-validation.s3.amazonaws.com/MirrorNode.yaml
   Arbiter:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -193,8 +211,9 @@ Resources:
         S3BucketNameParameter: !Ref S3BucketNameParameter
         InstanceTypeParameter: t3.small
         MirrorInstanceRole: ARBITER
-      TemplateURL: https://isc-tech-validation.s3.amazonaws.com/ArbiterNode.yaml
-      #TimeoutInMinutes: '5'
+      TemplateURL: !Sub https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/iris-cluster-arbiter-node.template.yaml 
+      #https://isc-tech-validation.s3.amazonaws.com/ArbiterNode.yaml
+
   LoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties: 
