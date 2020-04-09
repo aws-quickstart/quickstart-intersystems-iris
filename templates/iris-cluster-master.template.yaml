@@ -97,7 +97,7 @@ Parameters:
     AllowedPattern: "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*[^/]$"
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-) but should not end with forward slash (/)
     Default: aws-quickstart
-    Description: S3 bucket name for the Quick Start HANA-HA assets.
+    Description: S3 bucket name for the Quick Start IRIS assets.
     Type: String
   QSS3BucketRegion:
     Default: 'us-east-1'
@@ -107,7 +107,7 @@ Parameters:
     AllowedPattern: "^[0-9a-zA-Z-/]*[^/]$"
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/) but should not end with forward slash (/).
     Default: quickstart-intersystems-iris
-    Description: S3 key prefix for the Quick Start HANA-HA assets.
+    Description: S3 key prefix for the Quick Start IRIS assets.
     Type: String
 Resources:
   InstanceSecurityGroup:
@@ -199,6 +199,7 @@ Resources:
         MirrorPrimaryIP: !GetAtt 'Node01.Outputs.NodePrivateIP'
       TemplateURL: !Sub https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/iris-cluster-iris-node.template.yaml
       #https://isc-tech-validation.s3.amazonaws.com/MirrorNode.yaml
+
   Arbiter:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -250,6 +251,7 @@ Resources:
       Targets:
         - Id: !GetAtt 'Node01.Outputs.NodePrivateIP'
         - Id: !GetAtt 'Node02.Outputs.NodePrivateIP'
+        
 Outputs:
   JDBCEndpoint:
     Description: JDBC Connection String

@@ -81,7 +81,22 @@ Parameters:
   MirrorDBName:
     Type: String
     Default: DATA
-
+  QSS3BucketName:
+    AllowedPattern: "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*[^/]$"
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-) but should not end with forward slash (/)
+    Default: aws-quickstart
+    Description: S3 bucket name for the Quick Start IRIS assets.
+    Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: 'The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.'
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: "^[0-9a-zA-Z-/]*[^/]$"
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/) but should not end with forward slash (/).
+    Default: quickstart-intersystems-iris
+    Description: S3 key prefix for the Quick Start IRIS assets.
+    Type: String
 Resources:
   ##Node Start##         
   NodeInstance:
@@ -187,8 +202,11 @@ Resources:
            aws s3 cp s3://$BUCKET/$DISTR.tar.gz .
            #aws s3 cp s3://$BUCKET/MirrorInstaller.xml .
            #aws s3 cp s3://$BUCKET/iris.service .
-           wget https://isc-tech-validation.s3.amazonaws.com/MirrorInstaller.xml
-           wget https://isc-tech-validation.s3.amazonaws.com/iris.service
+           #wget https://isc-tech-validation.s3.amazonaws.com/MirrorInstaller.xml
+           #wget https://isc-tech-validation.s3.amazonaws.com/iris.service
+           # ${QSS3BucketRegion}
+           wget https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}scripts/MirrorInstaller.xml
+           wget https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}scripts/iris.service
            cp iris.service /etc/systemd/system/iris.service
            chmod 644 /etc/systemd/system/iris.service
            tar -xvf $DISTR.tar.gz
