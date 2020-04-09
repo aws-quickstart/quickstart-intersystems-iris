@@ -1,0 +1,20 @@
+project:
+  name: quickstart-intersystems-iris
+  regions:
+  - us-east-1
+tests:
+  default:
+    template: ./templates/iris-cluster-master.template.yaml
+    regions:
+    - us-east-1
+    parameters:
+      IRISPasswordParameter: demo
+      IamInstanceProfileParameter: S3FullAccessForEC2
+      InstanceSubnetIdParameter: subnet-024ee9bc8ba573050,subnet-0f8276594813c3362,subnet-00c2110d79a398dc6
+      InstanceTypeParameter: m5.large
+      RemoteAccessCIDRParameter: 0.0.0.0/0
+      S3BucketNameParameter: asia-pac-training-2019
+      SshKeyParameter: $[alfred_getkeypair]
+      VpcIdParameter: vpc-029aba04d6dbcfae4
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]
