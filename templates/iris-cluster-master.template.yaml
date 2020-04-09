@@ -103,6 +103,8 @@ Parameters:
     Default: quickstart-intersystems-iris/
     Description: S3 key prefix for the Quick Start HANA-HA assets.
     Type: String
+Conditions:
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
 Resources:
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -173,7 +175,11 @@ Resources:
         InstanceTypeParameter: !Ref InstanceTypeParameter
         MirrorInstanceRole: PRIMARY
         MirrorArbiterIP: !GetAtt 'Arbiter.Outputs.NodePrivateIP'
-      TemplateURL: !Sub https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/iris-cluster-iris-node.template.yaml
+      TemplateURL:
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/iris-cluster-iris-node.template.yaml'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       #https://isc-tech-validation.s3.amazonaws.com/MirrorNode.yaml
       
   Node02:
@@ -189,7 +195,11 @@ Resources:
         InstanceTypeParameter: !Ref InstanceTypeParameter
         MirrorInstanceRole: FAILOVER
         MirrorPrimaryIP: !GetAtt 'Node01.Outputs.NodePrivateIP'
-      TemplateURL: !Sub https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/iris-cluster-iris-node.template.yaml
+      TemplateURL:
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/iris-cluster-iris-node.template.yaml'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       #https://isc-tech-validation.s3.amazonaws.com/MirrorNode.yaml
   Arbiter:
     Type: AWS::CloudFormation::Stack
@@ -202,7 +212,11 @@ Resources:
         S3BucketNameParameter: !Ref S3BucketNameParameter
         InstanceTypeParameter: t3.small
         MirrorInstanceRole: ARBITER
-      TemplateURL: !Sub https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/iris-cluster-arbiter-node.template.yaml 
+      TemplateURL:
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/iris-cluster-arbiter-node.template.yaml'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       #https://isc-tech-validation.s3.amazonaws.com/ArbiterNode.yaml
 
   LoadBalancer:
