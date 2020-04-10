@@ -13,8 +13,9 @@ tests:
       InstanceSubnetIdParameter: subnet-024ee9bc8ba573050,subnet-0f8276594813c3362,subnet-00c2110d79a398dc6
       InstanceTypeParameter: m5.large
       RemoteAccessCIDRParameter: 0.0.0.0/0
-      S3BucketNameParameter: asia-pac-training-2019
-      SshKeyParameter: $[alfred_getkeypair]
+      S3BucketNameParameter: irisdistr
+      SshKeyParameter: ec2
       VpcIdParameter: vpc-029aba04d6dbcfae4
       QSS3BucketName: $[taskcat_autobucket]
       QSS3BucketRegion: $[taskcat_current_region]
+      QSS3KeyPrefix: quickstart-intersystems-iris/

@@ -26,6 +26,13 @@ Metadata:
           - InstanceTypeParameter
           - SshKeyParameter
           - IamInstanceProfileParameter
+      -
+        Label: 
+          default: "QuickStart Parameters"
+        Parameters: 
+          - QSS3KeyPrefix
+          - QSS3BucketRegion
+          - QSS3BucketName
 
     ParameterLabels: 
       VpcIdParameter: 
@@ -79,7 +86,7 @@ Parameters:
   S3BucketNameParameter:
     Description: S3 Bucket with IRIS binaries
     Type: String
-    Default: asia-pac-training-2019
+    Default: irisdistr
   InstanceTypeParameter:
     Description: Cluster node instance type
     Type: String
@@ -109,6 +116,7 @@ Parameters:
     Default: quickstart-intersystems-iris
     Description: S3 key prefix for the Quick Start IRIS assets.
     Type: String
+
 Resources:
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -180,6 +188,9 @@ Resources:
         InstanceTypeParameter: !Ref InstanceTypeParameter
         MirrorInstanceRole: PRIMARY
         MirrorArbiterIP: !GetAtt 'Arbiter.Outputs.NodePrivateIP'
+        QSS3KeyPrefix: !Ref QSS3KeyPrefix
+        QSS3BucketRegion: !Ref QSS3BucketRegion
+        QSS3BucketName: !Ref QSS3BucketName
       TemplateURL: !Sub https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/iris-cluster-iris-node.template.yaml
       #https://isc-tech-validation.s3.amazonaws.com/MirrorNode.yaml
       
