@@ -21,10 +21,6 @@ Parameters:
     Description: SSH Keypair to login to the instance
     Default: anton-isc
     Type: AWS::EC2::KeyPair::KeyName
-  IamInstanceProfileParameter:
-    Description: IAM instance role for EC2 instances 
-    Default: S3FullAccessForEC2
-    Type: String
   S3BucketNameParameter:
     Description: S3 Bucket with IRIS binaries
     Type: String
@@ -51,6 +47,34 @@ Parameters:
       - ARBITER      
 
 Resources:
+  IRISRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Policies:
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action:
+                  - s3:GetObject
+                  - s3:ListBucket
+                Resource: "*"
+                Effect: Allow
+          PolicyName: aws-quick-start-s3-policy
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Effect: Allow
+        Version: '2012-10-17'
+  IRISProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref 'IRISRole'
+      Path: /
   ##Node Start##         
   NodeInstance:
     Type: AWS::EC2::Instance
@@ -66,7 +90,7 @@ Resources:
         #- AMIx64
       InstanceType: !Ref InstanceTypeParameter
       KeyName: !Ref SshKeyParameter
-      IamInstanceProfile: !Ref IamInstanceProfileParameter
+      IamInstanceProfile: !Ref 'IRISProfile'
       SecurityGroupIds:
         - !Ref InstanceSecurityGroupParameter
       SubnetId: !Ref InstanceSubnetIdParameter

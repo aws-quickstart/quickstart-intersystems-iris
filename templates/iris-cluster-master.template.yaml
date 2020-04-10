@@ -25,7 +25,6 @@ Metadata:
         Parameters: 
           - InstanceTypeParameter
           - SshKeyParameter
-          - IamInstanceProfileParameter
       -
         Label: 
           default: "QuickStart Parameters"
@@ -45,8 +44,6 @@ Metadata:
         default: "EC2 instance type for IRIS nodes"
       SshKeyParameter:
         default: "SSH Key Pair name to connect to EC2 instances"
-      IamInstanceProfileParameter:
-        default: "IAM Role for EC2 instances"
       IRISPasswordParameter:
         default: "Password for SuperUser/_SYSTEM user"
       S3BucketNameParameter:
@@ -71,10 +68,6 @@ Parameters:
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/x
     Description: Restrict to <your-own-ip>/32 for better security
     Default: 0.0.0.0/0
-    Type: String
-  IamInstanceProfileParameter:
-    Description: IAM instance role for EC2 instances 
-    Default: S3FullAccessForEC2
     Type: String
   IRISPasswordParameter:
     Description: Admin Password for IRIS (at least 4 alphanumeric characters)
@@ -111,12 +104,14 @@ Parameters:
     Description: 'The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.'
     Type: String
   QSS3KeyPrefix:
-    AllowedPattern: "^[0-9a-zA-Z-/]*[^/]$"
-    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/) but should not end with forward slash (/).
-    Default: quickstart-intersystems-iris
-    Description: S3 key prefix for the Quick Start IRIS assets.
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slash (/).
+    Default: quickstart-intersystems-iris/
+    Description: S3 key prefix for the Quick Start HANA-HA assets.
     Type: String
-
+Conditions:
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
 Resources:
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -182,7 +177,6 @@ Resources:
         InstanceSubnetIdParameter: !Select [0,!Ref InstanceSubnetIdParameter]
         InstanceSecurityGroupParameter: !Ref InstanceSecurityGroup
         SshKeyParameter: !Ref SshKeyParameter
-        IamInstanceProfileParameter: !Ref IamInstanceProfileParameter
         IRISPasswordParameter: !Ref IRISPasswordParameter
         S3BucketNameParameter: !Ref S3BucketNameParameter
         InstanceTypeParameter: !Ref InstanceTypeParameter
@@ -191,7 +185,11 @@ Resources:
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
         QSS3BucketRegion: !Ref QSS3BucketRegion
         QSS3BucketName: !Ref QSS3BucketName
-      TemplateURL: !Sub https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/iris-cluster-iris-node.template.yaml
+      TemplateURL:
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/iris-cluster-iris-node.template.yaml'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       #https://isc-tech-validation.s3.amazonaws.com/MirrorNode.yaml
       
   Node02:
@@ -202,13 +200,16 @@ Resources:
         InstanceSubnetIdParameter: !Select [1,!Ref InstanceSubnetIdParameter]
         InstanceSecurityGroupParameter: !Ref InstanceSecurityGroup
         SshKeyParameter: !Ref SshKeyParameter
-        IamInstanceProfileParameter: !Ref IamInstanceProfileParameter
         IRISPasswordParameter: !Ref IRISPasswordParameter
         S3BucketNameParameter: !Ref S3BucketNameParameter
         InstanceTypeParameter: !Ref InstanceTypeParameter
         MirrorInstanceRole: FAILOVER
         MirrorPrimaryIP: !GetAtt 'Node01.Outputs.NodePrivateIP'
-      TemplateURL: !Sub https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/iris-cluster-iris-node.template.yaml
+      TemplateURL:
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/iris-cluster-iris-node.template.yaml'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       #https://isc-tech-validation.s3.amazonaws.com/MirrorNode.yaml
 
   Arbiter:
@@ -219,11 +220,14 @@ Resources:
         InstanceSubnetIdParameter: !Select [2,!Ref InstanceSubnetIdParameter]
         InstanceSecurityGroupParameter: !Ref InstanceSecurityGroup
         SshKeyParameter: !Ref SshKeyParameter
-        IamInstanceProfileParameter: !Ref IamInstanceProfileParameter
         S3BucketNameParameter: !Ref S3BucketNameParameter
         InstanceTypeParameter: t3.small
         MirrorInstanceRole: ARBITER
-      TemplateURL: !Sub https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/iris-cluster-arbiter-node.template.yaml 
+      TemplateURL:
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/iris-cluster-arbiter-node.template.yaml'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       #https://isc-tech-validation.s3.amazonaws.com/ArbiterNode.yaml
 
   LoadBalancer:
