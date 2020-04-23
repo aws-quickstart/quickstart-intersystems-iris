@@ -53,11 +53,9 @@ Metadata:
 Parameters:
   VpcIdParameter:
     Description: Launch EC2 instances in this VPC
-    Default: vpc-029aba04d6dbcfae4
     Type: AWS::EC2::VPC::Id
   InstanceSubnetIdParameter:
     Description: 3 Subnets in three different Availability Zones
-    Default: 'subnet-024ee9bc8ba573050,subnet-0f8276594813c3362,subnet-00c2110d79a398dc6'
     Type: 'List<AWS::EC2::Subnet::Id>'
   SshKeyParameter:
     Description: SSH Keypair to login to the instance
@@ -235,7 +233,7 @@ Resources:
     Properties: 
       IpAddressType: ipv4
       Type: network
-      Name: !Sub "${AWS::StackName}-NLB"
+      # Name: !Sub "${AWS::StackName}-NLB" # throws an error "name too long"
       Scheme: internet-facing
       Subnets:
         - !Select [0,!Ref InstanceSubnetIdParameter]
@@ -259,7 +257,7 @@ Resources:
       #HealthCheckIntervalSeconds: 10
       #UnhealthyThresholdCount: 3
       VpcId: !Ref VpcIdParameter
-      Name: !Sub "${AWS::StackName}-TargetGroup"
+      # Name: !Sub "${AWS::StackName}-TargetGroup" # throws an error "name too long"
       Port: 51773
       Protocol: TCP
       TargetType: ip
@@ -273,13 +271,13 @@ Outputs:
     Value: !Join
       - ''
       - ['jdbc:IRIS://', !GetAtt 'LoadBalancer.DNSName', ':51773/DATA']
-  Node01PublicIP:
+  Node01Portal:
     Description: Node 01 Management Portal
     Value: !Join
       - ''
-      - ['http://', !GetAtt 'Node01.Outputs.NodePublicIP', ':52773/csp/sys/%25CSP.Portal.Home.zen']
-  Node02PublicIP:
+      - ['http://', !GetAtt 'Node01.Outputs.NodePrivateIP', ':52773/csp/sys/%25CSP.Portal.Home.zen']
+  Node02Portal:
     Description: Node 02 Management Portal
     Value: !Join
       - ''
-      - ['http://', !GetAtt 'Node02.Outputs.NodePublicIP', ':52773/csp/sys/%25CSP.Portal.Home.zen']
+      - ['http://', !GetAtt 'Node02.Outputs.NodePrivateIP', ':52773/csp/sys/%25CSP.Portal.Home.zen']
