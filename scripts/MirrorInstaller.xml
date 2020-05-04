@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="IRIS" version="26" zv="IRIS for Windows (x86-64) 2019.3.0DILW (Build 107U)" ts="2019-08-16 11:54:47">
+<Class name="SE.ShardInstaller">
+<Super>%RegisteredObject</Super>
+<TimeChanged>65241,42867.863106</TimeChanged>
+<TimeCreated>65241,31721.907335</TimeCreated>
+
+<XData name="ShardInstall">
+<XMLNamespace>INSTALLER</XMLNamespace>
+<Data><![CDATA[
+<Manifest>
+	<SystemSetting Name="Config.config.MaxServers"  Value="64"/>      
+	<SystemSetting Name="Config.config.MaxServerConn"  Value="64"/>      
+	<SystemSetting Name="Config.config.globals8kb"  Value="${ConfigGlobalBuffers}"/>      
+	<SystemSetting Name="Config.config.routines"  Value="384"/>      
+	<SystemSetting Name="Config.config.locksiz"  Value="16777216"/>      
+	<SystemSetting Name="Config.config.gmheap"  Value="512000"/> 
+	<SystemSetting Name="Config.Startup.JobServers"  Value="256"/> 
+	<SystemSetting Name="Config.SQL.SaveMAC"  Value="1"/>      
+	<SystemSetting Name="Config.Journal.CurrentDirectory"  Value="/iris/jrnl/pri"/>      
+	<SystemSetting Name="Config.Journal.AlternateDirectory"  Value="/iris/jrnl/alt"/>  
+	<Namespace Name="%SYS">
+           <Invoke Class="SE.ShardInstaller" Method="InitSecuritySettings" CheckStatus="1"/>
+        </Namespace>
+</Manifest>
+]]></Data>
+</XData>
+
+<Method name="InitSecuritySettings">
+<ClassMethod>1</ClassMethod>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+        do ##class(Security.Users).UnExpireUserPasswords("*")
+        do ##class(Security.Users).AddRoles("admin", "%ALL")
+        do ##class(Security.System).Get(,.p)
+        set p("AutheEnabled")=$zb(p("AutheEnabled"),16,7)
+        set sc = ##class(Security.System).Modify(,.p)
+        //set sc=##class(Security.Applications).Get("/csp/user",.prop)
+        //set prop("MatchRoles")=":%All"
+        //set prop("AutheEnabled")=64
+        //set sc=##class(Security.Applications).Modify("/csp/user",.prop)
+        quit sc
+]]></Implementation>
+</Method>
+
+<Method name="EnableMirroringService">
+<ClassMethod>1</ClassMethod>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+       do ##class(Security.Services).Get("%Service_Mirror", .p)
+       set p("Enabled") = 1
+       set sc=##class(Security.Services).Modify("%Service_Mirror", .p)
+       quit sc
+]]></Implementation>
+</Method>
+
+<Method name="CreateMirrorSet">
+<ClassMethod>1</ClassMethod>
+<FormalSpec><![CDATA[ArbiterIP:%String]]></FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+  set mirrorName="MIRRORSET"
+  set hostName=$system.INetInfo.HostNameToAddr($system.INetInfo.LocalHostName())
+  set systemName="MIRRORNODE01"
+  // Create mirror:
+  set mirror("UseSSL") = 0
+  if (ArbiterIP'="none") {
+    set mirror("ArbiterNode") = ArbiterIP
+  }
+  set sc = ##class(SYS.Mirror).CreateNewMirrorSet(mirrorName, systemName, .mirror)
+  write !,"Creating mirror "_mirrorName_"..."
+  if 'sc do $system.OBJ.DisplayError(sc)  
+  quit sc
+]]></Implementation>
+</Method>
+
+<Method name="JoinAsFailover">
+<ClassMethod>1</ClassMethod>
+<FormalSpec><![CDATA[PrimaryNodeIP:%String]]></FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+  set mirrorName="MIRRORSET"
+  set hostName=$system.INetInfo.HostNameToAddr($system.INetInfo.LocalHostName())
+  set systemName="MIRRORNODE02"
+  // Join as failover:
+  s sc=##class(SYS.Mirror).JoinMirrorAsFailoverMember(mirrorName,systemName,"IRIS",PrimaryNodeIP,,.MirrorInfo)
+  write !,"Jonining mirror "_mirrorName_"..."
+  if 'sc do $system.OBJ.DisplayError(sc)
+  quit sc
+]]></Implementation>
+</Method>
+
+<Method name="CreateMirroredDB">
+<ClassMethod>1</ClassMethod>
+<FormalSpec><![CDATA[dbName:%String]]></FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+  set dir="/iris/db/"
+  set mirrorName="MIRRORSET"
+  
+  write !, "Creating databases and NS ",dbName
+  
+  // Create the directory
+  do ##class(%Library.File).CreateNewDir(dir,dbName)
+  // Add DB to config
+  set Properties("Directory")=dir_dbName
+  do ##class(Config.Databases).Create(dbName,.Properties)
+  // Set the DB properties
+  set Properties("Directory")=dir_dbName
+  set rc = ##class(SYS.Database).CreateDatabase(dir_dbName,,,,,,dbName,mirrorName)
+  if 'rc { 
+    write !,"Database creation failed!"
+    do $system.OBJ.DisplayError(rc)
+    quit rc
+  }
+  
+  // Create namespace for mirrored database
+  set ns("Globals")=dbName
+  set ns("Routines")=dbName
+  do ##class(Config.Namespaces).Create(dbName,.ns)
+  set rc = ##class(Config.Namespaces).Exists(dbName,.obj,.status)
+  if 'rc {
+    write !, "NS creation failed."
+    do $system.OBJ.DisplayError(rc)
+    quit rc
+  }
+    
+  quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="setup">
+<Internal>1</Internal>
+<ClassMethod>1</ClassMethod>
+<CodeMode>objectgenerator</CodeMode>
+<FormalSpec><![CDATA[&pVars,pLogLevel:%Integer=3,pInstaller:%Installer.Installer,pLogger:%Installer.AbstractLogger]]></FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+   #; Let XGL document generate code for this method. 
+   Quit ##class(%Installer.Manifest).%Generate(%compiledclass,%code, "ShardInstall")
+]]></Implementation>
+</Method>
+</Class>
+</Export>

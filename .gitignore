@@ -1,1 +1,3 @@
-taskcat_outputs/index.html
+taskcat_outputs/*.*
+.taskcat/.remote_templates/*.*
+.DS_Store

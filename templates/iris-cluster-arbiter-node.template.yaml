@@ -12,7 +12,6 @@ Parameters:
   #  Type: AWS::EC2::VPC::Id
   InstanceSubnetIdParameter:
     Description: Launch EC2 instances in this subnet
-    Default: subnet-024ee9bc8ba573050
     Type: AWS::EC2::Subnet::Id
   InstanceSecurityGroupParameter:
     Description:  Security group for the instance
@@ -24,7 +23,7 @@ Parameters:
   S3BucketNameParameter:
     Description: S3 Bucket with IRIS binaries
     Type: String
-    Default: asia-pac-training-2019
+    Default: iris-distr
   InstanceTypeParameter:
     Description: Cluster node instance type
     Type: String
@@ -124,14 +123,13 @@ Resources:
   ##Node End##          
 
 Outputs:
-  NodePublicIP:
-    Description: Node PublicIP
-    Value: !Join
-      - ''
-      - ['', !GetAtt NodeInstance.PublicIp, '']
   NodePrivateIP:
     Description: Node PrivateIP
     Value: !Join
       - ''
       - ['', !GetAtt NodeInstance.PrivateIp, '']
- 
+  #NodePublicIP:
+  #  Description: Node PublicIP
+  #  Value: !Join
+  #    - ''
+  #    - ['', !GetAtt NodeInstance.PublicIp, ''] 
