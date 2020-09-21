@@ -57,6 +57,9 @@ Parameters:
   InstanceSubnetIdParameter:
     Description: 3 Subnets in three different Availability Zones
     Type: 'List<AWS::EC2::Subnet::Id>'
+  BastionSubnetIdParameter:
+    Description: Public Subnets
+    Type: 'List<AWS::EC2::Subnet::Id>'
   SshKeyParameter:
     Description: SSH Keypair to login to the instance
     Default: anton-isc
@@ -203,6 +206,9 @@ Resources:
         InstanceTypeParameter: !Ref InstanceTypeParameter
         MirrorInstanceRole: FAILOVER
         MirrorPrimaryIP: !GetAtt 'Node01.Outputs.NodePrivateIP'
+        QSS3KeyPrefix: !Ref QSS3KeyPrefix
+        QSS3BucketRegion: !Ref QSS3BucketRegion
+        QSS3BucketName: !Ref QSS3BucketName
       TemplateURL:
         !Sub
           - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/iris-cluster-iris-node.template.yaml'
@@ -236,8 +242,8 @@ Resources:
       # Name: !Sub "${AWS::StackName}-NLB" # throws an error "name too long"
       Scheme: internet-facing
       Subnets:
-        - !Select [0,!Ref InstanceSubnetIdParameter]
-        - !Select [1,!Ref InstanceSubnetIdParameter]
+        - !Select [0,!Ref BastionSubnetIdParameter]
+        - !Select [1,!Ref BastionSubnetIdParameter]
   NLBListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties: 
@@ -271,13 +277,13 @@ Outputs:
     Value: !Join
       - ''
       - ['jdbc:IRIS://', !GetAtt 'LoadBalancer.DNSName', ':51773/DATA']
-  Node01Portal:
-    Description: Node 01 Management Portal
+  Node01PrivateIP:
+    Description: Node 01 Private IP
     Value: !Join
       - ''
-      - ['http://', !GetAtt 'Node01.Outputs.NodePrivateIP', ':52773/csp/sys/%25CSP.Portal.Home.zen']
-  Node02Portal:
-    Description: Node 02 Management Portal
+      - ['',!GetAtt 'Node01.Outputs.NodePrivateIP', '']
+  Node02PrivateIP:
+    Description: Node 02 Private IP
     Value: !Join
       - ''
-      - ['http://', !GetAtt 'Node02.Outputs.NodePrivateIP', ':52773/csp/sys/%25CSP.Portal.Home.zen']
+      - ['',!GetAtt 'Node02.Outputs.NodePrivateIP', '']
