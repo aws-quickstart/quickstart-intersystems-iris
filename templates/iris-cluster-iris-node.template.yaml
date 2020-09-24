@@ -207,7 +207,7 @@ Resources:
            #consider changing to ex4 defaults for journal
            #echo "/dev/sde       /iris/jrnl/alt  xfs    defaults,nofail 0       2" >> /etc/fstab
            mount -a
-           chmod -R 775 /iris
+           chmod -R 777 /iris
           
            #set sysctl once for system boot
            sysctl -w vm.swappiness=5
@@ -230,8 +230,10 @@ Resources:
            #wget https://isc-tech-validation.s3.amazonaws.com/MirrorInstaller.xml
            #wget https://isc-tech-validation.s3.amazonaws.com/iris.service
            # ${QSS3BucketRegion}
-           wget https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}scripts/MirrorInstaller.xml
-           wget https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}scripts/iris.service
+           # wget https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}scripts/MirrorInstaller.xml
+           # wget https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}scripts/iris.service
+           aws s3 cp s3://${QSS3BucketName}/${QSS3KeyPrefix}scripts/MirrorInstaller.xml .
+           aws s3 cp s3://${QSS3BucketName}/${QSS3KeyPrefix}scripts/iris.service .
            cp iris.service /etc/systemd/system/iris.service
            chmod 644 /etc/systemd/system/iris.service
            tar -xvf $DISTR.tar.gz
