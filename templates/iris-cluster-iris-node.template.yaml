@@ -8,20 +8,30 @@ Metadata:
 Mappings:
 
   IRISParametersMap:
-    m5.large:
+    m5.large: 
       GlobalBuffers: 4000
-    m5.xlarge:
-      GlobalBuffers: 12000
-    m5.2xlarge:
+      gmheap: 256000
+      LockTable: 64000
+    r5.xlarge:
       GlobalBuffers: 24000
-    m5.4xlarge:
-      GlobalBuffers: 48000
+      gmheap: 512000
+      LockTable: 96000
     r5.2xlarge:
       GlobalBuffers: 48000
+      gmheap: 512000
+      LockTable: 96000
     r5.4xlarge:
       GlobalBuffers: 100000
+      gmheap: 768000
+      LockTable: 96000
     r5.8xlarge:
       GlobalBuffers: 200000
+      gmheap: 1024000
+      LockTable: 128000
+    r5.16xlarge:
+      GlobalBuffers: 200000
+      gmheap: 1024000
+      LockTable: 128000
 
 
 Parameters:
