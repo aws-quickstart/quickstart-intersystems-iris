@@ -1,10 +1,10 @@
-:quickstart-project-name: quickstart-documentation-base
-:partner-product-name: Example Product Name
-:partner-product-short-name: Example Product Name
-:partner-company-name: Example Company Name, Ltd.
-:doc-month: May
+:quickstart-project-name: quickstart-intersystems-iris
+:partner-product-name: InterSystems IRIS
+:partner-product-short-name: IRIS
+:partner-company-name: InterSystems Corp.
+:doc-month: September
 :doc-year: 2020
-:partner-contributors: John Doe and Jane Doe - {partner-company-name}
+:partner-contributors: Anton Umnikov - {partner-company-name}
 :quickstart-contributors: Jim Smith - AWS Global Partner SA, AWS + Joe Jones - Technical Product Manager, AWS
 :deployment_time: 30 minutes / 1 hour
 :default_deployment_region: us-east-1

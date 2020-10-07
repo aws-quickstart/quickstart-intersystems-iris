@@ -15,7 +15,43 @@ For additional information, see https://docs.aws.amazon.com/AWSCloudFormation/la
 
 *A.* We recommend that you launch the Quick Start templates from the links in this guide or from another S3 bucket. If you deploy the templates from a local copy on your computer or from a location other than an S3 bucket, you might encounter template size limitations. For more information about AWS CloudFormation quotas, see the http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html[AWS documentation^].
 
+*Q.* Stack is being created, but I can't access IRIS
+
+It takes approximately 2 minutes from the moment EC2 instance status turns into CREATE COMPLETED to the moment IRIS is fully available. 
+
 
 == Troubleshooting
 
-<Steps for troubleshooting the deployment go here.>
+For command line access, connect to the IRIS nodes via bastion host:
+
+[source,bash]
+----
+$ chmod 400 <my-ec2-key>.pem
+$ ssh-add <my-ec2-key>.pem
+$ ssh -J ec2-user@<bastion-public-ip> ec2-user@<node-private-ip> -L 52773:<node-private-ip>:52773
+----
+
+After that, the IRIS Management Portal for the instance would be available at: http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen Credentials - User: SuperUser, and the password you entered at stack creation.
+
+SSH to the EC2 Node instances and check if IRIS is running:
+
+[source,bash]
+$iris list
+
+If you don't see any active IRIS instances, or the message 'iris: command not found' appears, then IRIS installation has failed. Check:
+
+[source,bash]
+$cat /var/log/cloud-init-output.log
+
+on the instance to identify any problems with the IRIS installation during instance first start.
+
+To connect to the IRIS command prompt use:
+
+[source,bash]
+$ iris session iris
+
+Consult InterSystems IRIS Management and Monitoring guide: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM
+
+Contact InterSystems Support.
+
+If EC2 instances are not available/reachable, contact AWS Support.

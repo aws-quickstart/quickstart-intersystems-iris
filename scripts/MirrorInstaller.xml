@@ -15,7 +15,7 @@
 	<SystemSetting Name="Config.config.routines"  Value="384"/>      
 	<SystemSetting Name="Config.config.locksiz"  Value="16777216"/>      
 	<SystemSetting Name="Config.config.gmheap"  Value="512000"/> 
-	<SystemSetting Name="Config.Startup.JobServers"  Value="256"/> 
+	<!--<SystemSetting Name="Config.Startup.JobServers"  Value="256"/>--> 
 	<SystemSetting Name="Config.SQL.SaveMAC"  Value="1"/>      
 	<SystemSetting Name="Config.Journal.CurrentDirectory"  Value="/iris/jrnl/pri"/>      
 	<SystemSetting Name="Config.Journal.AlternateDirectory"  Value="/iris/jrnl/alt"/>  
@@ -65,7 +65,8 @@
   // Create mirror:
   set mirror("UseSSL") = 0
   if (ArbiterIP'="none") {
-    set mirror("ArbiterNode") = ArbiterIP
+    set mirror("ArbiterNode") = ArbiterIP_"|2188"
+    //set mirror("ArbiterPort") = 2188
   }
   set sc = ##class(SYS.Mirror).CreateNewMirrorSet(mirrorName, systemName, .mirror)
   write !,"Creating mirror "_mirrorName_"..."
@@ -84,7 +85,7 @@
   set systemName="MIRRORNODE02"
   // Join as failover:
   s sc=##class(SYS.Mirror).JoinMirrorAsFailoverMember(mirrorName,systemName,"IRIS",PrimaryNodeIP,,.MirrorInfo)
-  write !,"Jonining mirror "_mirrorName_"..."
+  write !,"Jonining mirror "_mirrorName_"...",!
   if 'sc do $system.OBJ.DisplayError(sc)
   quit sc
 ]]></Implementation>
@@ -98,7 +99,7 @@
   set dir="/iris/db/"
   set mirrorName="MIRRORSET"
   
-  write !, "Creating databases and NS ",dbName
+  write !, "Creating databases and NS ",dbName,"...",!
   
   // Create the directory
   do ##class(%Library.File).CreateNewDir(dir,dbName)

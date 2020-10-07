@@ -197,37 +197,54 @@ Resources:
         QSS3BucketName: !Ref 'QSS3BucketName'
         QSS3BucketRegion: !Ref 'QSS3BucketRegion'
         QSS3KeyPrefix: !Ref 'QSS3KeyPrefix'
-  Bastion:
+  # Bastion:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL:
+  #       Fn::Sub:
+  #         - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/iris-bastion.template.yaml'
+  #         - S3Region: !If
+  #             - UsingDefaultBucket
+  #             - !Ref AWS::Region
+  #             - !Ref QSS3BucketRegion
+  #           S3Bucket: !If
+  #             - UsingDefaultBucket
+  #             - !Sub '${QSS3BucketName}-${AWS::Region}'
+  #             - !Ref QSS3BucketName
+  #     Parameters:
+  #       VpcIdParameter: !GetAtt 'VPCStack.Outputs.VPCID'
+  #       InstanceSubnetIdParameter: !GetAtt 'VPCStack.Outputs.PublicSubnet1ID'
+  #       RemoteAccessCIDRParameter: !Ref RemoteAccessCIDRParameter
+  #       SshKeyParameter: !Ref SshKeyParameter
+  BastionStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL:
-        Fn::Sub:
-          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/iris-bastion.template.yaml'
-          - S3Region: !If
-              - UsingDefaultBucket
-              - !Ref AWS::Region
-              - !Ref QSS3BucketRegion
-            S3Bucket: !If
-              - UsingDefaultBucket
-              - !Sub '${QSS3BucketName}-${AWS::Region}'
-              - !Ref QSS3BucketName
+      TemplateURL: !Sub
+        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}submodules/quickstart-linux-bastion/templates/linux-bastion.template'
+        - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+          S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Parameters:
-        VpcIdParameter: !GetAtt 'VPCStack.Outputs.VPCID'
-        InstanceSubnetIdParameter: !GetAtt 'VPCStack.Outputs.PublicSubnet1ID'
-        RemoteAccessCIDRParameter: !Ref RemoteAccessCIDRParameter
-        SshKeyParameter: !Ref SshKeyParameter
+        BastionAMIOS: 'Amazon-Linux2-HVM'
+        KeyPairName: !Ref 'SshKeyParameter'
+        PublicSubnet1ID: !GetAtt VPCStack.Outputs.PublicSubnet1ID
+        PublicSubnet2ID: !GetAtt VPCStack.Outputs.PublicSubnet2ID
+        QSS3BucketName: !Ref QSS3BucketName
+        QSS3KeyPrefix: !Sub "${QSS3KeyPrefix}submodules/quickstart-linux-bastion/"
+        QSS3BucketRegion: !Ref QSS3BucketRegion
+        RemoteAccessCIDR: !Ref RemoteAccessCIDRParameter
+        VPCID: !GetAtt VPCStack.Outputs.VPCID
 Outputs:
   JDBCEndpoint:
     Description: JDBC Connection String
     Value: !Join
       - ''
       - ['', !GetAtt 'IRISStack.Outputs.JDBCEndpoint', '']
-  Node01Portal:
+  Node01IP:
     Description: Node 01 Access
     Value: !Join
       - ''
       - ['', !GetAtt 'IRISStack.Outputs.Node01PrivateIP', '']
-  Node02Portal:
+  Node02IP:
     Description: Node 02 Access
     Value: !Join
       - ''
@@ -236,4 +253,5 @@ Outputs:
     Description: Basion Host public IP
     Value: !Join
       - ''
-      - ['', !GetAtt Bastion.Outputs.NodePublicIP, '']
+      - ['', !GetAtt BastionStack.Outputs.EIP1, '']
+      #- ['', !GetAtt Bastion.Outputs.NodePublicIP, '']

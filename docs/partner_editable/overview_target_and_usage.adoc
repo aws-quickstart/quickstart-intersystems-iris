@@ -4,4 +4,4 @@
 
 This Quick Start reference deployment guide provides step-by-step instructions for deploying {partner-product-short-name} on the AWS Cloud.
 
-This Quick Start is for users who <target audience and usage scenario>
+This Quick Start is for users who are installing InterSystems IRIS® data platform on their own AWS account, according to InterSystems and AWS best practices.
