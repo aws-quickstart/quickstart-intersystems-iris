@@ -16,8 +16,8 @@ tests:
       PrivateSubnet2CIDR: 10.0.2.0/24
       PrivateSubnet3CIDR: 10.0.3.0/24
       InstanceTypeParameter: m5.large
-      S3BucketNameParameter: iris-distr
-      SshKeyParameter: ec2
+      S3BucketNameParameter: override
+      SshKeyParameter: $[taskcat_getkeypair]
       QSS3BucketName: $[taskcat_autobucket]
       QSS3BucketRegion: $[taskcat_current_region]
       QSS3KeyPrefix: quickstart-intersystems-iris/

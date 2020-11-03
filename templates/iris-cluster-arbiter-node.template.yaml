@@ -23,7 +23,7 @@ Parameters:
   S3BucketNameParameter:
     Description: S3 Bucket with IRIS binaries
     Type: String
-    Default: iris-distr
+    Default: ''
   InstanceTypeParameter:
     Description: Cluster node instance type
     Type: String
