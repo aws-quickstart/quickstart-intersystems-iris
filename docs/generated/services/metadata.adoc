@@ -1,1 +1,14 @@
-// placeholder
+
+:template_aws_cloudformation_stack:
+:template_aws_ec2_instance:
+:template_aws_ec2_securitygroup:
+:template_aws_ec2_securitygroupingress:
+:template_aws_elasticloadbalancingv2_listener:
+:template_aws_elasticloadbalancingv2_loadbalancer:
+:template_aws_elasticloadbalancingv2_targetgroup:
+:template_aws_iam_instanceprofile:
+:template_aws_iam_role:
+:template_cloudformation:
+:template_ec2:
+:template_elasticloadbalancingv2:
+:template_iam:

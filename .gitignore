@@ -1,4 +1,0 @@
-taskcat_outputs/*.*
-.taskcat/.remote_templates/*.*
-.DS_Store
-docs/index.html

@@ -1,0 +1,34 @@
+
+.IRIS Configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Password for SuperUser/_SYSTEM user
+(`IRISPasswordParameter`)|`**__Requires input__**`|Admin Password for IRIS (at least 4 alphanumeric characters)|S3 bucket with IRIS binaries
+(`S3BucketNameParameter`)|`**__Blank string__**`|S3 Bucket with IRIS binaries
+|===
+.Network Configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Availability Zones
+(`AvailabilityZones`)|`**__Requires input__**`|List of Availability Zones to use for the subnets in the VPC. Note: The logical order is preserved and 3 AZs are used for this deployment.|Allowed CIDR block for external access to the instances
+(`RemoteAccessCIDRParameter`)|`0.0.0.0/0`|Restrict to <your-own-ip>/32 for better security|VPC CIDR
+(`VPCCIDR`)|`10.0.0.0/16`|CIDR Block for the VPC|Private Subnet 1 CIDR
+(`PrivateSubnet1CIDR`)|`10.0.1.0/24`|CIDR block for private subnet 1 located in Availability Zone 1.|Private Subnet 2 CIDR
+(`PrivateSubnet2CIDR`)|`10.0.2.0/24`|CIDR block for private subnet 2 located in Availability Zone 2.|Private Subnet 3 CIDR
+(`PrivateSubnet3CIDR`)|`10.0.3.0/24`|CIDR block for private subnet 3 located in Availability Zone 3.
+|===
+.EC2 Instance Configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|EC2 instance type for IRIS nodes
+(`InstanceTypeParameter`)|`m5.large`|Cluster node instance type|SSH Key Pair name to connect to EC2 instances
+(`SshKeyParameter`)|`anton-isc`|SSH Keypair to login to the instance
+|===
+.AWS Quick Start Configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Quick Start S3 Bucket Name
+(`QSS3BucketName`)|`aws-quickstart`|S3 bucket name for the IRIS Quick Start assets.|Quick Start S3 Key Prefix
+(`QSS3KeyPrefix`)|`quickstart-intersystems-iris/`|S3 key prefix for the IRIS Quick Start assets.|Quick Start S3 Bucket Region
+(`QSS3BucketRegion`)|`us-east-1`|The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.
+|===
