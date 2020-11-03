@@ -1,0 +1,5 @@
+// Replace the content in <>
+// Briefly describe the software. Use consistent and clear branding. 
+// Include the benefits of using the software on AWS, and provide details on usage scenarios.
+
+InterSystems IRIS makes it easier to build high-performance, machine learning-enabled applications that connect data and application silos. IRIS is deployed into your AWS account across three Avaiability Zones.

@@ -1,0 +1,27 @@
+project:
+  name: quickstart-intersystems-iris
+  owner: quickstart-eng@amazon.com
+  package_lambda: false
+  regions:
+  - us-east-1
+  - us-east-2
+  - us-west-2
+tests:
+  iris:
+    parameters:
+      IRISPasswordParameter: demo
+      AvailabilityZones: $[taskcat_getaz_3]
+      RemoteAccessCIDRParameter: 0.0.0.0/0
+      VPCCIDR: 10.0.0.0/16
+      PrivateSubnet1CIDR: 10.0.1.0/24
+      PrivateSubnet2CIDR: 10.0.2.0/24
+      PrivateSubnet3CIDR: 10.0.3.0/24
+      InstanceTypeParameter: m5.large
+      S3BucketNameParameter: override
+      SshKeyParameter: $[taskcat_getkeypair]
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]
+      QSS3KeyPrefix: quickstart-intersystems-iris/
+    template: ./templates/iris-entrypoint-new-vpc.template.yaml
+    regions:
+    - us-east-1

@@ -1,0 +1,1 @@
+This Quick Start is not supported in N. California (us-west-1) as there are only two Availability Zones available.

@@ -1,0 +1,296 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Metadata:
+    Author: Anton Umnikov
+    Last Updated: April 6, 2020
+    Description: IRIS Mirror Node
+
+Mappings:
+
+  IRISParametersMap:
+    m5.large: 
+      GlobalBuffers: 4000
+      gmheap: 256000
+      LockTable: 64000
+    r5.xlarge:
+      GlobalBuffers: 24000
+      gmheap: 512000
+      LockTable: 96000
+    r5.2xlarge:
+      GlobalBuffers: 48000
+      gmheap: 512000
+      LockTable: 96000
+    r5.4xlarge:
+      GlobalBuffers: 100000
+      gmheap: 768000
+      LockTable: 96000
+    r5.8xlarge:
+      GlobalBuffers: 200000
+      gmheap: 1024000
+      LockTable: 128000
+    r5.16xlarge:
+      GlobalBuffers: 200000
+      gmheap: 1024000
+      LockTable: 128000
+
+
+Parameters:
+  #VpcIdParameter:
+  #  Description: Launch EC2 instances in this VPC
+  #  Type: AWS::EC2::VPC::Id
+  InstanceSubnetIdParameter:
+    Description: Launch EC2 instances in this subnet
+    Type: AWS::EC2::Subnet::Id
+  InstanceSecurityGroupParameter:
+    Description:  Security group for the instance
+    Type: AWS::EC2::SecurityGroup::Id
+  SshKeyParameter:
+    Description: SSH Keypair to login to the instance
+    Type: AWS::EC2::KeyPair::KeyName
+  IRISPasswordParameter:
+    Description: Admin Password for IRIS
+    Type: String
+    NoEcho: true
+  S3BucketNameParameter:
+    Description: S3 Bucket with IRIS binaries
+    Type: String
+  InstanceTypeParameter:
+    Description: Cluster node instance type
+    Type: String
+    Default: m5.large
+    AllowedValues: 
+      - m5.large
+      - m5.xlarge
+      - m5.2xlarge
+      - m5.4xlarge
+      - r5.2xlarge
+      - r5.4xlarge
+      - r5.8xlarge
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+  MirrorInstanceRole:
+    Description: Cluster node instance role
+    Type: String
+    Default: NONE
+    AllowedValues: 
+      - NONE
+      - PRIMARY
+      - FAILOVER
+      - ASYNC
+      - ARBITER      
+  MirrorPrimaryIP:
+    Type: String
+    Default: none
+  MirrorArbiterIP:
+    Type: String
+    Default: none
+  MirrorDBName:
+    Type: String
+    Default: DATA
+  QSS3BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-) but should not end with forward slash (/)
+    Default: aws-quickstart
+    Description: S3 bucket name for the Quick Start IRIS assets.
+    Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: 'The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.'
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/) but should not end with forward slash (/).
+    Default: quickstart-intersystems-iris
+    Description: S3 key prefix for the Quick Start IRIS assets.
+    Type: String
+Resources:
+  IRISRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Policies:
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action:
+                  - s3:GetObject
+                  - s3:ListBucket
+                Resource: "*"
+                Effect: Allow
+          PolicyName: aws-quick-start-s3-policy
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Effect: Allow
+        Version: '2012-10-17'
+  IRISProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref 'IRISRole'
+      Path: /
+  ##Node Start##         
+  NodeInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      Tags: 
+        - 
+          Key: Name
+          Value: !Sub "${AWS::StackName}-IRIS"
+      BlockDeviceMappings:
+        # /iris/sys
+        - DeviceName: /dev/sdb
+          Ebs:
+            DeleteOnTermination: true
+            VolumeSize: 256
+            VolumeType: io1
+            Iops: 1000
+            Encrypted : true
+        # /iris/db
+        - DeviceName: /dev/sdc
+          Ebs:
+            DeleteOnTermination: true
+            VolumeSize: 512
+            VolumeType: io1
+            Iops: 10000
+            Encrypted : true
+        # /iris/jrnl
+        - DeviceName: /dev/sdd
+          Ebs:
+            DeleteOnTermination: true
+            VolumeSize: 512
+            VolumeType: io1
+            Iops: 1000
+            Encrypted : true
+
+      
+      ImageId: !Ref LatestAmiId 
+        #Fn::FindInMap:
+        #- RegionMap
+        #- Ref: AWS::Region
+        #- AMIx64
+      InstanceType: !Ref InstanceTypeParameter
+      KeyName: !Ref SshKeyParameter
+      IamInstanceProfile: !Ref 'IRISProfile'
+      SecurityGroupIds:
+        - !Ref InstanceSecurityGroupParameter
+      SubnetId: !Ref InstanceSubnetIdParameter
+      UserData:
+        Fn::Base64:
+         Fn::Sub:
+         - |
+           #!/usr/bin/env bash
+           DISTR=IRIS-2020.1.0.215.0-lnxrhx64
+           BUCKET=${ConfigS3BucketName}
+           INSTANCEROLE=${MirrorInstanceRole}
+           if [ "$INSTANCEROLE" == "PRIMARY" ]
+           then
+            echo "Initializing as PRIMARY mirror member"
+            IRIS_COMMAND_INIT_MIRROR="##class(SE.ShardInstaller).CreateMirrorSet(\"${MirrorArbiterIP}\")"
+            IRIS_COMMAND_CREATE_DB="##class(SE.ShardInstaller).CreateMirroredDB(\"${MirrorDBName}\")"
+           fi
+           if [ "$INSTANCEROLE" == "FAILOVER" ]
+           then
+            echo "Initializing as FAILOVER mirror member"
+            IRIS_COMMAND_INIT_MIRROR="##class(SE.ShardInstaller).JoinAsFailover(\"${MirrorPrimaryIP}\")"
+            IRIS_COMMAND_CREATE_DB="##class(SE.ShardInstaller).CreateMirroredDB(\"${MirrorDBName}\")"
+           fi
+           set -o errexit
+           yum update -y
+           mkfs -t xfs /dev/nvme1n1
+           mkfs -t xfs /dev/nvme2n1
+           mkfs -t xfs /dev/nvme3n1
+           #mkfs -t xfs /dev/nvme4n1
+           mkdir /iris
+           mkdir /iris/sys
+           mkdir /iris/db
+           mkdir /iris/jrnl
+           mkdir /iris/jrnl/pri
+           mkdir /iris/jrnl/alt
+           echo "/dev/sdb       /iris/sys   xfs    defaults,nofail 0       2" >> /etc/fstab
+           echo "/dev/sdc       /iris/db   xfs    defaults,nofail 0       2" >> /etc/fstab
+           echo "/dev/sdd       /iris/jrnl/pri   xfs    defaults,nofail 0       2" >> /etc/fstab
+           #consider changing to ex4 defaults for journal
+           #echo "/dev/sde       /iris/jrnl/alt  xfs    defaults,nofail 0       2" >> /etc/fstab
+           mount -a
+           chmod -R 777 /iris
+          
+           #set sysctl once for system boot
+           sysctl -w vm.swappiness=5
+           
+           #parameters, depending on the memory size
+           #sysctl -w vm.nr_hugepages=24576
+           #vm.dirty_background_ratio=5
+           #vm.dirty_ratio=10
+
+           cat > /etc/sysctl.d/99-iris.conf <<- "EOF"
+           vm.swappiness = 5
+           EOF
+
+           mkdir /tmp/irisdistr
+           cd /tmp/irisdistr
+           aws s3 cp s3://$BUCKET/iris.key .
+           aws s3 cp s3://$BUCKET/$DISTR.tar.gz .
+           #aws s3 cp s3://$BUCKET/MirrorInstaller.xml .
+           #aws s3 cp s3://$BUCKET/iris.service .
+           #wget https://isc-tech-validation.s3.amazonaws.com/MirrorInstaller.xml
+           #wget https://isc-tech-validation.s3.amazonaws.com/iris.service
+           # ${QSS3BucketRegion}
+           # wget https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}scripts/MirrorInstaller.xml
+           # wget https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}scripts/iris.service
+           aws s3 cp s3://${QSS3BucketName}/${QSS3KeyPrefix}scripts/MirrorInstaller.xml .
+           aws s3 cp s3://${QSS3BucketName}/${QSS3KeyPrefix}scripts/iris.service .
+           cp iris.service /etc/systemd/system/iris.service
+           chmod 644 /etc/systemd/system/iris.service
+           tar -xvf $DISTR.tar.gz
+           cd $DISTR
+           sudo ISC_PACKAGE_PLATFORM="lnxrhx64" \
+           ISC_PACKAGE_UNICODE="Y" \
+           ISC_PACKAGE_INSTANCENAME="IRIS" \
+           ISC_PACKAGE_INSTALLDIR="/iris/sys" \
+           ISC_INSTALLER_MANIFEST="/tmp/irisdistr/MirrorInstaller.xml" \
+           ISC_PACKAGE_INITIAL_SECURITY="Normal" \
+           ISC_PACKAGE_USER_PASSWORD="${ConfigIRISPassword}" \
+           ISC_INSTALLER_PARAMETERS="ConfigGlobalBuffers=${ConfigGlobalBuffers}" \
+           ./irisinstall_silent &&
+           cd .. &&
+           sudo cp iris.key /iris/sys/mgr &&
+           sudo iris stop iris quietly &&
+           sudo systemctl daemon-reload &&
+           sudo systemctl enable ISCAgent.service &&
+           sudo systemctl start ISCAgent.service &&
+           sudo systemctl enable iris &&
+           sudo systemctl start iris &&
+           iris session iris -U\%SYS "##class(SE.ShardInstaller).EnableMirroringService()" &&
+           sleep 2 &&
+           echo "\nexecuting $IRIS_COMMAND_INIT_MIRROR" && 
+           iris session iris -U\%SYS "$IRIS_COMMAND_INIT_MIRROR" &&
+           sleep 2 &&
+           echo "\nexecuting $IRIS_COMMAND_CREATE_DB" && 
+           iris session iris -U\%SYS "$IRIS_COMMAND_CREATE_DB"
+         - {
+           ConfigGlobalBuffers: !FindInMap [IRISParametersMap, !Ref InstanceTypeParameter, GlobalBuffers],
+           ConfigIRISPassword: !Ref IRISPasswordParameter,
+           ConfigS3BucketName: !Ref S3BucketNameParameter,
+           MirrorInstanceRole: !Ref MirrorInstanceRole,
+           MirrorPrimaryIP: !Ref MirrorPrimaryIP,
+           MirrorArbiterIP: !Ref MirrorArbiterIP,
+           MirrorDBName: !Ref MirrorDBName
+           }
+  ##Node End##          
+
+Outputs:
+  NodePrivateIP:
+    Description: Node PrivateIP
+    Value: !Join
+      - ''
+      - ['', !GetAtt NodeInstance.PrivateIp, '']
+  #NodePublicIP:
+  #  Description: Node PublicIP
+  #  Value: !Join
+  #    - ''
+  #    - ['', !GetAtt NodeInstance.PublicIp, ''] 

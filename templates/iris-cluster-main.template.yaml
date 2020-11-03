@@ -1,0 +1,281 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: This template creates  a three-AZ deployment of InterSystems IRIS 
+  into an existing VPC. **WARNING** This template creates Amazon EC2 
+  instance and related resources. You will be billed for the AWS resources used if
+  you create a stack from this template. (qs-1r9onjih3)
+Metadata:
+  QuickStartDocumentation:
+    EntrypointName: "Launch into an existing VPC"
+    Order: "2"
+  Author: Anton Umnikov
+  Last Updated: April 6, 2020
+  AWS::CloudFormation::Interface: 
+    ParameterGroups: 
+      - Label: 
+          default: "IRIS Configuration"
+        Parameters: 
+          - IRISPasswordParameter
+          - S3BucketNameParameter
+      - Label: 
+          default: "Network Configuration"
+        Parameters: 
+          - VpcIdParameter
+          - InstanceSubnetIdParameter
+          - RemoteAccessCIDRParameter
+      - Label: 
+          default: "EC2 Instance Configuration"
+        Parameters: 
+          - InstanceTypeParameter
+          - SshKeyParameter
+      - Label: 
+          default: "QuickStart Parameters"
+        Parameters: 
+          - QSS3KeyPrefix
+          - QSS3BucketRegion
+          - QSS3BucketName
+    ParameterLabels: 
+      VpcIdParameter: 
+        default: "Which VPC should this be deployed to?"
+      InstanceSubnetIdParameter: 
+        default: "Subnets to deploy IRIS"
+      RemoteAccessCIDRParameter:
+        default: "Allowed CIDR block for external access to the instances"
+      InstanceTypeParameter:
+        default: "EC2 instance type for IRIS nodes"
+      SshKeyParameter:
+        default: "SSH Key Pair name to connect to EC2 instances"
+      IRISPasswordParameter:
+        default: "Password for SuperUser/_SYSTEM user"
+      S3BucketNameParameter:
+        default: "S3 bucket with IRIS binaries"
+Parameters:
+  VpcIdParameter:
+    Description: Launch EC2 instances in this VPC
+    Type: AWS::EC2::VPC::Id
+  InstanceSubnetIdParameter:
+    Description: 3 Subnets in three different Availability Zones
+    Type: 'List<AWS::EC2::Subnet::Id>'
+  BastionSubnetIdParameter:
+    Description: Public Subnets
+    Type: 'List<AWS::EC2::Subnet::Id>'
+  SshKeyParameter:
+    Description: SSH Keypair to login to the instance
+    Default: anton-isc
+    Type: AWS::EC2::KeyPair::KeyName
+  RemoteAccessCIDRParameter:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/x
+    Description: Restrict to <your-own-ip>/32 for better security
+    Default: 0.0.0.0/0
+    Type: String
+  IRISPasswordParameter:
+    Description: Admin Password for IRIS (at least 4 alphanumeric characters)
+    Type: String
+    NoEcho: true
+    MinLength: 4
+    MaxLength: 32
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+  S3BucketNameParameter:
+    Description: S3 Bucket with IRIS binaries
+    Type: String
+    Default: ''
+  InstanceTypeParameter:
+    Description: Cluster node instance type
+    Type: String
+    Default: m5.large
+    AllowedValues: 
+      - m5.large
+      - m5.xlarge
+      - m5.2xlarge
+      - m5.4xlarge
+      - r5.2xlarge
+      - r5.4xlarge
+      - r5.8xlarge
+  QSS3BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-) but should not end with forward slash (/)
+    Default: aws-quickstart
+    Description: S3 bucket name for the Quick Start IRIS assets.
+    Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: 'The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.'
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slash (/).
+    Default: quickstart-intersystems-iris/
+    Description: S3 key prefix for the Quick Start HANA-HA assets.
+    Type: String
+Conditions:
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
+Resources:
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow all hosts in this group to access each other 
+      GroupName: !Sub "${AWS::StackName}-IRIS-SG"
+      VpcId: !Ref VpcIdParameter
+  SecurityGroupIngressSSH:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref InstanceSecurityGroup
+      IpProtocol: TCP
+      FromPort: 22
+      ToPort: 22
+      CidrIp: !Ref RemoteAccessCIDRParameter
+  SecurityGroupIngressIRISSuperServer:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref InstanceSecurityGroup
+      IpProtocol: TCP
+      FromPort: 51773
+      ToPort: 51773
+      CidrIp: !Ref RemoteAccessCIDRParameter
+  SecurityGroupIngressIRISWeb:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref InstanceSecurityGroup
+      IpProtocol: TCP
+      FromPort: 52773
+      ToPort: 52773
+      CidrIp: !Ref RemoteAccessCIDRParameter
+  SecurityGroupIngressIRISAgent:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref InstanceSecurityGroup
+      IpProtocol: TCP
+      FromPort: 2188
+      ToPort: 2188
+      SourceSecurityGroupId: !Ref InstanceSecurityGroup
+  SecurityGroupIngressIRISECP:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref InstanceSecurityGroup
+      IpProtocol: TCP
+      FromPort: 51773
+      ToPort: 51773
+      SourceSecurityGroupId: !Ref InstanceSecurityGroup
+  SecurityGroupIngressIRISVPC:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref InstanceSecurityGroup
+      IpProtocol: TCP
+      FromPort: 52773
+      ToPort: 52773
+      CidrIp: 0.0.0.0/0
+      #CidrIp: !GetAtt VpcIdParameter.CidrBlock
+  Node01:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        #VpcIdParameter: !Ref VpcIdParameter
+        InstanceSubnetIdParameter: !Select [0,!Ref InstanceSubnetIdParameter]
+        InstanceSecurityGroupParameter: !Ref InstanceSecurityGroup
+        SshKeyParameter: !Ref SshKeyParameter
+        IRISPasswordParameter: !Ref IRISPasswordParameter
+        S3BucketNameParameter: !Ref S3BucketNameParameter
+        InstanceTypeParameter: !Ref InstanceTypeParameter
+        MirrorInstanceRole: PRIMARY
+        MirrorArbiterIP: !GetAtt 'Arbiter.Outputs.NodePrivateIP'
+        QSS3KeyPrefix: !Ref QSS3KeyPrefix
+        QSS3BucketRegion: !Ref QSS3BucketRegion
+        QSS3BucketName: !Ref QSS3BucketName
+      TemplateURL:
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/iris-cluster-iris-node.template.yaml'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      #https://isc-tech-validation.s3.amazonaws.com/MirrorNode.yaml
+  Node02:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        #VpcIdParameter: !Ref VpcIdParameter
+        InstanceSubnetIdParameter: !Select [1,!Ref InstanceSubnetIdParameter]
+        InstanceSecurityGroupParameter: !Ref InstanceSecurityGroup
+        SshKeyParameter: !Ref SshKeyParameter
+        IRISPasswordParameter: !Ref IRISPasswordParameter
+        S3BucketNameParameter: !Ref S3BucketNameParameter
+        InstanceTypeParameter: !Ref InstanceTypeParameter
+        MirrorInstanceRole: FAILOVER
+        MirrorPrimaryIP: !GetAtt 'Node01.Outputs.NodePrivateIP'
+        QSS3KeyPrefix: !Ref QSS3KeyPrefix
+        QSS3BucketRegion: !Ref QSS3BucketRegion
+        QSS3BucketName: !Ref QSS3BucketName
+      TemplateURL:
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/iris-cluster-iris-node.template.yaml'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      #https://isc-tech-validation.s3.amazonaws.com/MirrorNode.yaml
+  Arbiter:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        #VpcIdParameter: !Ref VpcIdParameter
+        InstanceSubnetIdParameter: !Select [2,!Ref InstanceSubnetIdParameter]
+        InstanceSecurityGroupParameter: !Ref InstanceSecurityGroup
+        SshKeyParameter: !Ref SshKeyParameter
+        S3BucketNameParameter: !Ref S3BucketNameParameter
+        InstanceTypeParameter: t3.small
+        MirrorInstanceRole: ARBITER
+      TemplateURL:
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/iris-cluster-arbiter-node.template.yaml'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      #https://isc-tech-validation.s3.amazonaws.com/ArbiterNode.yaml
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties: 
+      IpAddressType: ipv4
+      Type: network
+      # Name: !Sub "${AWS::StackName}-NLB" # throws an error "name too long"
+      Scheme: internet-facing
+      Subnets:
+        - !Select [0,!Ref BastionSubnetIdParameter]
+        - !Select [1,!Ref BastionSubnetIdParameter]
+  NLBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties: 
+      DefaultActions: 
+        - Type: forward
+          TargetGroupArn: !Ref LBTargetGroup
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 51773
+      Protocol: TCP
+  LBTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckPath: /csp/mirror_status.cxw
+      HealthCheckPort: '52773'
+      HealthCheckProtocol: HTTP
+      #HealthCheckTimeoutSeconds: 10
+      #HealthCheckIntervalSeconds: 10
+      #UnhealthyThresholdCount: 3
+      VpcId: !Ref VpcIdParameter
+      # Name: !Sub "${AWS::StackName}-TargetGroup" # throws an error "name too long"
+      Port: 51773
+      Protocol: TCP
+      TargetType: ip
+      Targets:
+        - Id: !GetAtt 'Node01.Outputs.NodePrivateIP'
+        - Id: !GetAtt 'Node02.Outputs.NodePrivateIP'
+Outputs:
+  JDBCEndpoint:
+    Description: JDBC Connection String
+    Value: !Join
+      - ''
+      - ['jdbc:IRIS://', !GetAtt 'LoadBalancer.DNSName', ':51773/DATA']
+  Node01PrivateIP:
+    Description: Node 01 Private IP
+    Value: !Join
+      - ''
+      - ['',!GetAtt 'Node01.Outputs.NodePrivateIP', '']
+  Node02PrivateIP:
+    Description: Node 02 Private IP
+    Value: !Join
+      - ''
+      - ['',!GetAtt 'Node02.Outputs.NodePrivateIP', '']
