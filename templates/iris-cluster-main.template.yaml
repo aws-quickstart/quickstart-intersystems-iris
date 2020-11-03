@@ -91,7 +91,7 @@ Parameters:
       - r5.4xlarge
       - r5.8xlarge
   QSS3BucketName:
-    AllowedPattern: "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*[^/]$"
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-) but should not end with forward slash (/)
     Default: aws-quickstart
     Description: S3 bucket name for the Quick Start IRIS assets.

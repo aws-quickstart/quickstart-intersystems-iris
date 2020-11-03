@@ -24,4 +24,4 @@ tests:
       QSS3KeyPrefix: quickstart-intersystems-iris/
     template: ./templates/iris-entrypoint-new-vpc.template.yaml
     regions:
-    - us-west-2
+    - us-east-1
