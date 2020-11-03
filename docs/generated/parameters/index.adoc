@@ -1,1 +1,6 @@
-// placeholder
+
+=== Launch into an existing VPC
+include::iris-cluster-main.template.adoc[]
+
+=== Launch into a new VPC
+include::iris-entrypoint-new-vpc.template.adoc[]

@@ -1,8 +1,6 @@
 // Replace the content in <>
 // Describe or link to specific knowledge requirements; for example: “familiarity with basic concepts in the areas of networking, database operations, and data encryption” or “familiarity with <software>.”
 
-This Quick Start assumes familiarity with <knowledge expectations>.
-
 .Knowledge of the following AWS services is required:
 
 * http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html[Amazon Elastic Compute Cloud (Amazon EC2)]

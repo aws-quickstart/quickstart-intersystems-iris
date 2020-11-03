@@ -5,7 +5,8 @@ Description: This template creates  a three-AZ deployment of InterSystems IRIS
   you create a stack from this template. (qs-1r9onjih3)
 Metadata:
   QuickStartDocumentation:
-    EntrypointName: "Launch into a new VPC"
+    EntrypointName: "Launch into an existing VPC"
+    Order: "2"
   Author: Anton Umnikov
   Last Updated: April 6, 2020
   AWS::CloudFormation::Interface: 

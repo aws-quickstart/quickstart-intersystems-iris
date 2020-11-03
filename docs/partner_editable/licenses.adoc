@@ -2,5 +2,5 @@
 
 //dublicae of pre-req information?
 
-InterSystems IRIS license key – you should be able to use your existing InterSystems IRIS license key (iris.key). You can also request an evaluation key via the
-InterSystems IRIS Evaluation Service: https://download.intersystems.com/download/register.csp[IRIS Evaluation Service]
+This deployment requires an InterSystems IRIS license key. You should be able to use your existing InterSystems IRIS license key (iris.key). You can also request an evaluation key via the
+https://download.intersystems.com/download/register.csp[IRIS Evaluation Service]

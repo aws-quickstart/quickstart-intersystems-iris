@@ -1,7 +1,8 @@
 // Add steps as necessary for accessing the software, post-configuration, and testing. Don’t include full usage instructions for your software, but add links to your product documentation for that information.
 //Should any sections not be applicable, remove them
+== Post deployment steps
 
-== Test the deployment
+=== Test the deployment
 // If steps are required to test the deployment, add them here. If not, remove the heading
 
 Establish connection to IRIS Node01 via Bastion Host
@@ -13,7 +14,7 @@ $ ssh-add <my-ec2-key>.pem
 $ ssh -J ec2-user@<bastion-public-ip> ec2-user@<node01-private-ip> -L 52773:<node01-private-ip>:52773
 ----
 
-IRIS Management Portal for the instance would be available at: http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen Credentials - User: SuperUser, and the password you entered at stack creation.
+The IRIS Management Portal for the instance should be available at: http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen Credentials - User: SuperUser, and the password you entered at stack creation.
 
 Navigate to _System Administration | Configuration | Mirror Settings | Edit Mirror_. Make sure the system is configured with two Failover members.
 
@@ -21,7 +22,7 @@ Verify that the mirrored database is created and active. _System Administration 
 
 Validate the JDBC connection by following the https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=AFL\_jdbc[First Look JDBC document] to validate JDBC connectivity to IRIS via the Load Balancer. Make sure to change the url variable to the value displayed in the template output, and password from 'SYS' to the one you selected during setup.
 
-### Failover Test
+=== Failover Test
 
 On the Node02, navigate to the Management Portal (see &quot;Health Check&quot; section above) and open the Configuration-\&gt;Edit Mirror page. At the bottom of the page you will see _This member is the backup. Changes must be made on the primary._
 
@@ -30,21 +31,3 @@ Locate the Node01 instance in the AWS EC2 management dashboard. Its name will be
 Restart the Node01 instance. This will simulate an instance/AZ outage.
 
 Reload Node02 'Edit Mirror' page. The status should change to: _This member is the primary. Changes will be sent to other members._
-
-== Post deployment steps
-// If Post-deployment steps are required, add them here. If not, remove the heading
-
-== Best practices for using {partner-product-short-name} on AWS
-// Provide post-deployment best practices for using the technology on AWS, including considerations such as migrating data, backups, ensuring high performance, high availability, etc. Link to software documentation for detailed information.
-
-_Add any best practices for using the software._
-
-== Security
-// Provide post-deployment best practices for using the technology on AWS, including considerations such as migrating data, backups, ensuring high performance, high availability, etc. Link to software documentation for detailed information.
-
-_Add any security-related information._
-
-== Other useful information
-//Provide any other information of interest to users, especially focusing on areas where AWS or cloud usage differs from on-premises usage.
-
-_Add any other details that will help the customer use the software on AWS._

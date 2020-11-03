@@ -6,6 +6,7 @@ Description: This template creates a VPC infrastructure for a three-AZ
 Metadata:
   QuickStartDocumentation:
     EntrypointName: "Launch into a new VPC"
+    Order: "1"
   AWS::CloudFormation::Interface:
     ParameterGroups: 
       - Label: 
