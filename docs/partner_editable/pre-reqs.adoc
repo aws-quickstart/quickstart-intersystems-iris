@@ -6,9 +6,11 @@ To access the EC2 instances provisioned by this quickstart, you will need at lea
 
 ==== Aquire {partner-product-name} binaries and license key
 
-InterSystems IRIS binaries are available to InterSystems customers via https://wrc.intersystems.com/. Login with your WRC credentials and follow the links to Actions; SW Distributions; InterSystems IRIS. This Deployment Guide is written for the InterSystems IRIS 2020.1 build 217. IRIS binaries file names are of the format `ISCAgent-2020.1.0.215.0-lnxrhx64.tar.gz` and `IRISHealth-2020.1.0.217.1-lnxrhx64.tar.gz`.
+InterSystems IRIS binaries are available to InterSystems customers via https://wrc.intersystems.com/. Login with your WRC credentials and follow the links to Actions; SW Distributions; InterSystems IRIS. This Deployment Guide is written for the InterSystems IRIS 2020.1 build 215. IRIS binaries file names are of the format `ISCAgent-2020.1.0.215.0-lnxrhx64.tar.gz` and `IRIS-2020.1.0.215.1-lnxrhx64.tar.gz`.
 
-You should be able to use your existing InterSystems IRIS license key (iris.key). You can also request an evaluation key via the https://download.intersystems.com/download/register.csp[IRIS Evaluation Service].
+You should be able to use your existing InterSystems IRIS license key (iris.key) or request one via https://evaluation.intersystems.com/[IRIS Evaluation Service]. Note - QuickStart requires non-container version of the key and binaries. 
+
+Non-registered customers - please contact InterSystems at https://www.intersystems.com/who-we-are/contact-us/[Contact InterSystems]
 
 
 ==== Prepare for the deployment
@@ -21,6 +23,6 @@ Create an S3 bucket, copy the IRIS binaries files and iris.key:
 BUCKET=<my bucket>
 aws s3 mb s3://$BUCKET
 aws s3 cp ISCAgent-2020.1.0.215.0-lnxrhx64.tar.gz s3://$BUCKET
-aws s3 cp IRISHealth-2020.1.0.217.1-lnxrhx64.tar.gz s3://$BUCKET
+aws s3 cp IRIS-2020.1.0.215.1-lnxrhx64.tar.gz s3://$BUCKET
 aws s3 cp iris.key s3://$BUCKET
 ----

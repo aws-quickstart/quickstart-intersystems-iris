@@ -2,7 +2,7 @@
 AWSTemplateFormatVersion: 2010-09-09
 Metadata:
     Author: Anton Umnikov
-    Last Updated: April 6, 2020
+    Last Updated: November 20, 2020
     Description: IRIS Mirror Node
 
 Mappings:
@@ -147,24 +147,24 @@ Resources:
           Ebs:
             DeleteOnTermination: true
             VolumeSize: 256
-            VolumeType: io1
-            Iops: 1000
+            VolumeType: gp2
+            #Iops: 1000
             Encrypted : true
         # /iris/db
         - DeviceName: /dev/sdc
           Ebs:
             DeleteOnTermination: true
             VolumeSize: 512
-            VolumeType: io1
-            Iops: 10000
+            VolumeType: gp2
+            #Iops: 10000
             Encrypted : true
         # /iris/jrnl
         - DeviceName: /dev/sdd
           Ebs:
             DeleteOnTermination: true
             VolumeSize: 512
-            VolumeType: io1
-            Iops: 1000
+            VolumeType: gp2
+            #Iops: 1000
             Encrypted : true
 
       

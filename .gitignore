@@ -2,3 +2,5 @@ taskcat_outputs/*.*
 .taskcat/.remote_templates/*.*
 .DS_Store
 docs/index.html
+docs/generated/parameters/iris-cluster-main.template.adoc
+docs/generated/parameters/iris-entrypoint-new-vpc.template.adoc
