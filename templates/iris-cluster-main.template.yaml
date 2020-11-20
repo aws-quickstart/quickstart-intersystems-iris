@@ -8,7 +8,7 @@ Metadata:
     EntrypointName: "Launch into an existing VPC"
     Order: "2"
   Author: Anton Umnikov
-  Last Updated: April 6, 2020
+  Last Updated: November 20, 2020
   AWS::CloudFormation::Interface: 
     ParameterGroups: 
       - Label: 
@@ -60,7 +60,7 @@ Parameters:
     Type: 'List<AWS::EC2::Subnet::Id>'
   SshKeyParameter:
     Description: SSH Keypair to login to the instance
-    Default: anton-isc
+    #Default: anton-isc
     Type: AWS::EC2::KeyPair::KeyName
   RemoteAccessCIDRParameter:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
@@ -85,12 +85,11 @@ Parameters:
     Default: m5.large
     AllowedValues: 
       - m5.large
-      - m5.xlarge
-      - m5.2xlarge
-      - m5.4xlarge
+      - r5.xlarge
       - r5.2xlarge
       - r5.4xlarge
       - r5.8xlarge
+      - r5.16xlarge
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-) but should not end with forward slash (/)

@@ -68,7 +68,7 @@ Parameters:
     Type: List<AWS::EC2::AvailabilityZone::Name>
   SshKeyParameter:
     Description: SSH Keypair to login to the instance
-    Default: anton-isc
+    #Default: anton-isc
     Type: AWS::EC2::KeyPair::KeyName
   RemoteAccessCIDRParameter:
 #    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
@@ -93,12 +93,11 @@ Parameters:
     Default: m5.large
     AllowedValues: 
       - m5.large
-      - m5.xlarge
-      - m5.2xlarge
-      - m5.4xlarge
+      - r5.xlarge
       - r5.2xlarge
       - r5.4xlarge
       - r5.8xlarge
+      - r5.16xlarge
   PrivateSubnet1CIDR:
 #    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28

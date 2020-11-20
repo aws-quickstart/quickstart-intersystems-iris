@@ -2,9 +2,9 @@
 :partner-product-name: InterSystems IRIS
 :partner-product-short-name: IRIS
 :partner-company-name: InterSystems Corp.
-:doc-month: September
+:doc-month: November
 :doc-year: 2020
-:partner-contributors: Anton Umnikov - {partner-company-name}
+:partner-contributors: Anton Umnikov, Senior Cloud Solutions Architect - {partner-company-name}
 :quickstart-contributors: Jim Smith - AWS Global Partner SA, Joe Jones - Technical Product Manager, Dave May, Partner Solutions Architect (Quick Start team)
 :deployment_time: 20 minutes
 :default_deployment_region: us-east-1
