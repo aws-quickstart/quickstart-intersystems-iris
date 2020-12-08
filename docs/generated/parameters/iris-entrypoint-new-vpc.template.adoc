@@ -22,7 +22,7 @@
 |===
 |Parameter label (name) |Default value|Description|EC2 instance type for IRIS nodes
 (`InstanceTypeParameter`)|`m5.large`|Cluster node instance type|SSH Key Pair name to connect to EC2 instances
-(`SshKeyParameter`)|`anton-isc`|SSH Keypair to login to the instance
+(`SshKeyParameter`)|`**__Requires input__**`|SSH Keypair to login to the instance
 |===
 .AWS Quick Start Configuration
 [width="100%",cols="16%,11%,73%",options="header",]
