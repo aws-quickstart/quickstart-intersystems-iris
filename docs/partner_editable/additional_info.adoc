@@ -5,7 +5,7 @@
 === Test the deployment
 // If steps are required to test the deployment, add them here. If not, remove the heading
 
-Establish connection to IRIS Node01 via Bastion Host
+Establish a connection to IRIS Node01 via the Bastion Host
 
 [source,bash]
 ----
@@ -14,7 +14,10 @@ $ ssh-add <my-ec2-key>.pem
 $ ssh -J ec2-user@<bastion-public-ip> ec2-user@<node01-private-ip> -L 52773:<node01-private-ip>:52773
 ----
 
-The IRIS Management Portal for the instance should be available at: http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen Credentials - User: SuperUser, and the password you entered at stack creation.
+The IRIS Management Portal for the instance should be available at: http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen with the following credentials:
+
+* User: SuperUser
+* Password: password you entered at stack creation
 
 Navigate to _System Administration | Configuration | Mirror Settings | Edit Mirror_. Make sure the system is configured with two Failover members.
 

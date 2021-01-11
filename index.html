@@ -884,7 +884,7 @@ Amazon may share user-deployment information with the AWS Partner that collabora
 <h2 id="_intersystems_iris_on_aws">InterSystems IRIS on AWS</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>InterSystems IRIS Data Paltform makes it easier to build high-performance, machine learning-enabled applications that connect data and application silos. With this QuickStart IRIS is deployed into your AWS account in Highly Avaliable configuration using Mirroring in multiple Avaiability Zones.</p>
+<p>InterSystems IRIS Data Platform makes it easier to build high-performance, machine learning-enabled applications that connect data and application silos. With this Quick Start, IRIS is deployed into your AWS account in a highly avaliable configuration using mirroring in multiple Avaiability Zones.</p>
 </div>
 </div>
 </div>
@@ -1599,7 +1599,7 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 <div class="sect2">
 <h3 id="_test_the_deployment">Test the deployment</h3>
 <div class="paragraph">
-<p>Establish connection to IRIS Node01 via Bastion Host</p>
+<p>Establish a connection to IRIS Node01 via the Bastion Host</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1609,7 +1609,17 @@ $ ssh -J ec2-user@&lt;bastion-public-ip&gt; ec2-user@&lt;node01-private-ip&gt; -
 </div>
 </div>
 <div class="paragraph">
-<p>The IRIS Management Portal for the instance should be available at: <a href="http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen" class="bare">http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen</a> Credentials - User: SuperUser, and the password you entered at stack creation.</p>
+<p>The IRIS Management Portal for the instance should be available at: <a href="http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen" class="bare">http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen</a> with the following credentials:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>User: SuperUser</p>
+</li>
+<li>
+<p>Password: password you entered at stack creation</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>Navigate to <em>System Administration | Configuration | Mirror Settings | Edit Mirror</em>. Make sure the system is configured with two Failover members.</p>
