@@ -2,4 +2,4 @@
 // Briefly describe the software. Use consistent and clear branding. 
 // Include the benefits of using the software on AWS, and provide details on usage scenarios.
 
-InterSystems IRIS Data Platform makes it easier to build high-performance, machine learning-enabled applications that connect data and application silos. With this Quick Start, IRIS is deployed into your AWS account in a highly avaliable configuration using mirroring in multiple Avaiability Zones.
+With the InterSystems IRIS data platform, you can build high-performance, machine learning–enabled applications that connect data and application silos. This QuickStart deploys IRIS into your AWS account in a highly available configuration using mirroring in multiple Availability Zones.
