@@ -117,7 +117,7 @@ InterSystems IRIS can also be deployed in a single Availability Zone for develop
 11. Wait approximately 4 minutes for your CloudFormation template to deploy
 12. You can verify your deployment has succeeded by looking for a &#39;CREATE\_COMPLETE&#39; status
 13. If the status is &#39;CREATE\_FAILED&#39;, see the troubleshooting section in this guide
-14. Once deployment succeeds, please carry out Health Checks from this guide.
+14. Once deployment succeeds, please carry out Health Checks from this guide
 
 ## Security
 
@@ -260,7 +260,7 @@ Validate the JDBC connection by following the &quot;First Look JDBC&quot; docume
 
 ### Failover Test
 
-On the Node02, navigate to the Management Portal (see &quot;&quot; section above) and open the Configuration-\&gt;Edit Mirror page. At the bottom of the page you will see _This member is the backup. Changes must be made on the primary._
+On the Node02, navigate to the Management Portal (see &quot;Health Check&quot; section above) and open the Configuration-\&gt;Edit Mirror page. At the bottom of the page you will see _This member is the backup. Changes must be made on the primary._
 
 Locate the Node01 instance in the AWS EC2 management dashboard. Its name will be of the format: MyStackName-Node01-1NGXXXXXX
 
