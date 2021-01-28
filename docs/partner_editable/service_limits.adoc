@@ -3,13 +3,13 @@
 |Resource |This deployment uses
 
 // Space needed to maintain table headers
-|VPCs |1
-|Elastic IP addresses |1
+|VPC |1
+|Elastic IP address |1
 |AWS Identity and Access Management (IAM) security groups |2
-|IAM roles |1
-|Auto Scaling groups |1
-|Network Load Balancers |1
-|t2.micro instances (bastion)|1
-|t3.small instances (arbiter)|1
-|m5.large instances (IRIS Nodes) configurable|2
+|IAM role |1
+|Auto Scaling group |1
+|Network Load Balancer |1
+|t2.micro instance (bastion)|1
+|t3.small instance (arbiter)|1
+|m5.large instances (IRIS nodes), configurable|2
 |===

@@ -2,6 +2,6 @@
 
 //dublicae of pre-req information?
 
-This deployment requires noncontainer version of an InterSystems IRIS license key. Supported InterSystems customers might be able to use their existing InterSystems IRIS license key (iris.key) or request one via https://evaluation.intersystems.com/[IRIS Evaluation Service^]. 
+This deployment requires a noncontainer version of an InterSystems IRIS license key. Supported InterSystems customers might be able to use their existing InterSystems IRIS license key (iris.key) or request one by using the https://evaluation.intersystems.com/[IRIS Evaluation Service^]. 
 
-Nonregistered customers can contact InterSystems at https://www.intersystems.com/who-we-are/contact-us/[Contact InterSystems^]
+Nonregistered customers can https://www.intersystems.com/who-we-are/contact-us/[contact InterSystems^].

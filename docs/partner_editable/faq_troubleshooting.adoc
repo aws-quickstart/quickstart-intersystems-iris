@@ -4,7 +4,7 @@
 
 *Q.* I encountered a *CREATE_FAILED* error when I launched the Quick Start.
 
-*A.* If AWS CloudFormation fails to create the stack, we recommend that you relaunch the template with *Rollback on failure* set to *Disabled*. (This setting is under *Advanced* in the AWS CloudFormation console, *Options* page.) With this setting, the stack’s state is retained and the instance is left running, so you can troubleshoot the issue. (For Windows, look at the log files in %ProgramFiles%\Amazon\EC2ConfigService and C:\cfn\log.)
+*A.* If AWS CloudFormation fails to create the stack, we recommend that you relaunch the template with *Rollback on failure* set to *Disabled*. (This setting is under *Advanced* in the AWS CloudFormation console, *Options* page.) With this setting, the stack’s state is retained and the instance is left running, so you can troubleshoot the issue. (For Windows, look at the log files in `%ProgramFiles%\Amazon\EC2ConfigService` and `C:\cfn\log`.)
 // If you’re deploying on Linux instances, provide the location for log files on Linux, or omit this sentence.
 
 WARNING: When you set *Rollback on failure* to *Disabled*, you continue to incur AWS charges for this stack. Delete the stack when you finish troubleshooting.
@@ -13,16 +13,16 @@ For additional information, see https://docs.aws.amazon.com/AWSCloudFormation/la
 
 *Q.* I encountered a size limitation error when I deployed the AWS CloudFormation templates.
 
-*A.* We recommend that you launch the Quick Start templates from the links in this guide or from another S3 bucket. If you deploy the templates from a local copy on your computer or from a location other than an S3 bucket, you might encounter template size limitations. For more information about AWS CloudFormation quotas, see the http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html[AWS documentation^].
+*A.* We recommend that you launch the Quick Start templates from the links in this guide or from another S3 bucket. If you deploy the templates from a local copy on your computer or from a location other than an S3 bucket, you might encounter template size limitations. For more information, see http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html[AWS CloudFormation quotas^].
 
-*Q.* Stack is being created, but I can't access IRIS
+*Q.* The stack is being created, and I can't access IRIS.
 
-It takes approximately 2 minutes from the moment EC2 instance status turns into CREATE COMPLETED to the moment IRIS is fully available. 
+*A.* You probably simply need to wait. It takes approximately two minutes from the moment the EC2 instance status says **CREATE COMPLETED** to the moment IRIS is fully available. 
 
 
 == Troubleshooting
 
-For command line access, connect to the IRIS nodes via bastion host:
+For command line access, connect to the IRIS nodes using the bastion host (replacing the bracketed text):
 
 [source,bash]
 ----
@@ -31,19 +31,17 @@ $ ssh-add <my-ec2-key>.pem
 $ ssh -J ec2-user@<bastion-public-ip> ec2-user@<node-private-ip> -L 52773:<node-private-ip>:52773
 ----
 
-After that, the IRIS Management Portal for the instance would be available at: http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen Credentials - User: SuperUser, and the password you entered at stack creation.
+After that, the IRIS Management Portal for the instance would be available at `http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen` Credentials - User: SuperUser, and the password you entered at stack creation.
 
-SSH to the EC2 Node instances and check if IRIS is running:
+Connect to the EC2 node instances by using SSH. Verify that IRIS is running:
 
 [source,bash]
 $iris list
 
-If you don't see any active IRIS instances, or the message 'iris: command not found' appears, then IRIS installation has failed. Check:
+If you don't see any active IRIS instances, or if the message `iris: command not found` appears, then IRIS installation has failed. Check this on the instance to identify any problems with the IRIS installation during instance first start:
 
 [source,bash]
 $cat /var/log/cloud-init-output.log
-
-on the instance to identify any problems with the IRIS installation during instance first start.
 
 To connect to the IRIS command prompt use:
 
@@ -54,4 +52,6 @@ Consult InterSystems IRIS Management and Monitoring guide: https://docs.intersys
 
 Contact InterSystems Support.
 
-If EC2 instances are not available/reachable, contact AWS Support.
+If EC2 instances are not available or reachable, contact AWS Support. 
+
+//TODO Dave, In this Troubleshooting section, I'm not clear on whether we have any steps or whether these are individual issues. Would you please number the steps if they're steps, or otherwise adjust to clarify?

@@ -1,11 +1,11 @@
 // Add steps as necessary for accessing the software, post-configuration, and testing. Don’t include full usage instructions for your software, but add links to your product documentation for that information.
 //Should any sections not be applicable, remove them
-== Post deployment steps
+== Post-deployment steps
 
 === Test the deployment
 // If steps are required to test the deployment, add them here. If not, remove the heading
 
-Establish a connection to IRIS Node01 via the Bastion Host
+. Connect to IRIS node 1 using the bastion host (replacing bracketed text).
 
 [source,bash]
 ----
@@ -14,23 +14,38 @@ $ ssh-add <my-ec2-key>.pem
 $ ssh -J ec2-user@<bastion-public-ip> ec2-user@<node01-private-ip> -L 52773:<node01-private-ip>:52773
 ----
 
-The IRIS Management Portal for the instance should be available at: http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen with the following credentials:
+The IRIS Management Portal for the instance should be available at http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen with the following credentials:
+
+//TODO Dave, The preceding URL doesn't work for me. What should it be?
 
 * User: SuperUser
-* Password: password you entered at stack creation
+* Password: <password you entered at stack creation>
 
-Navigate to _System Administration | Configuration | Mirror Settings | Edit Mirror_. Make sure the system is configured with two Failover members.
+[start=2]
+. Navigate to **System Administration**, **Configuration**, **Mirror Settings**, **Edit Mirror**. Make sure the system is configured with two failover members.
 
-Verify that the mirrored database is created and active. _System Administration | Configuration | Local Databases_.
+. Navigate to **System Administration**, **Configuration**, **Local Databases**. Verify that the mirrored database is created and active.
 
-Validate the JDBC connection by following the https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=AFL\_jdbc[First Look JDBC document] to validate JDBC connectivity to IRIS via the Load Balancer. Make sure to change the url variable to the value displayed in the template output, and password from 'SYS' to the one you selected during setup.
+. Following https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=AFL_jdbc[First Look JDBC and InterSystems Databases^], validate JDBC connectivity to IRIS using the load balancer. Change the URL variable to the value displayed in the template output, and change the password from **SYS** to the one you selected during setup.
 
-=== Failover Test
+=== Failover test
 
-On the Node02, navigate to the Management Portal (see &quot;Health Check&quot; section above) and open the Configuration-\&gt;Edit Mirror page. At the bottom of the page you will see _This member is the backup. Changes must be made on the primary._
+. On node 2, navigate to the **Management Portal** (see "Health Check" section above). 
 
-Locate the Node01 instance in the AWS EC2 management dashboard. Its name will be of the format: MyStackName-Node01-1NGXXXXXX
+. Open the **Configuration**, **Edit Mirror** page. At the bottom of the page you should see "This member is the backup. Changes must be made on the primary."
 
-Restart the Node01 instance. This will simulate an instance/AZ outage.
+. Locate the node 1 instance in the AWS EC2 management dashboard. Its name has the format `MyStackName-Node01-1NG<XXXXXX>`.
 
-Reload Node02 'Edit Mirror' page. The status should change to: _This member is the primary. Changes will be sent to other members._
+. Restart the node 1 instance. This will simulate an instance/Availability Zone outage.
+
+. Reload the node 2 **Edit Mirror** page. The status should change to this: "This member is the primary. Changes will be sent to other members."
+
+//TODO Dave, In the first step above, what "Health Check" section are we referring to? If it's a section in the guide, please copy the heading text and bracket it <<like this>> to make a clickable link.
+
+//TODO Dave, How would we restate "instance/Availability Zone outage" to eliminate the slash?
+
+//TODO Dave, Might some people appreciate more context before starting this failover test? Might they want any clarification on how to do each step (and why)?
+
+//TODO Dave, In the .yaml file's description for VpcIdParameter, I've added "(e.g., vpc-0343606e)" from another deployment guide in case it's helpful to give an example ... but does this example work here as is?
+
+//TODO Dave, In the .yaml file's description for InstanceSubnetIdParameter, might people benefit from guidance on choosing 3 subnets? (In fact, please check for any other parameter descriptions that could benefit from additional guidance; we recently heard that this is sometimes the case with our descriptions. Thanks!)

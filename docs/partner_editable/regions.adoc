@@ -1,1 +1,8 @@
-This Quick Start is not supported in N. California (us-west-1) as there are only two Availability Zones available.
+This Quick Start is not supported in N. California (us-west-1) as there are only two Availability Zones available in that Region.
+
+//TODO Dave, Please update this per our current format...
+
+This Quick Start supports the following Regions:
+
+* us-east-1, US East (N. Virginia) (EXAMPLE)
+* us-east-2, US East (Ohio) (EXAMPLE)
