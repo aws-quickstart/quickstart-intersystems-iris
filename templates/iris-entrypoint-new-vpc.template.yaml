@@ -1,21 +1,20 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: This template creates a VPC infrastructure for a three-AZ
-  deployment of InterSystems IRIS. **WARNING** This template creates Amazon EC2 
+Description: This template deploys InterSystems IRIS into a new a VPC, including 3 Availability Zones. **WARNING** This template creates Amazon EC2 
   instance and related resources. You will be billed for the AWS resources used if
   you create a stack from this template. (qs-1r5s7urrb)
 Metadata:
   QuickStartDocumentation:
-    EntrypointName: "Launch into a new VPC"
+    EntrypointName: "Parameters for deploying into a new VPC"
     Order: "1"
   AWS::CloudFormation::Interface:
     ParameterGroups: 
       - Label: 
-          default: "IRIS Configuration"
+          default: "IRIS configuration"
         Parameters: 
           - IRISPasswordParameter
           - S3BucketNameParameter
       - Label: 
-          default: "Network Configuration"
+          default: "Network configuration"
         Parameters: 
           - AvailabilityZones
           - RemoteAccessCIDRParameter
@@ -24,71 +23,70 @@ Metadata:
           - PrivateSubnet2CIDR
           - PrivateSubnet3CIDR
       - Label: 
-          default: "EC2 Instance Configuration"
+          default: "EC2 instance configuration"
         Parameters: 
           - InstanceTypeParameter
           - SshKeyParameter
       - Label:
-          default: "AWS Quick Start Configuration"
+          default: "AWS Quick Start configuration"
         Parameters:
           - QSS3BucketName
-          - QSS3KeyPrefix
           - QSS3BucketRegion
+          - QSS3KeyPrefix
     ParameterLabels: 
       AvailabilityZones:
         default: Availability Zones
       RemoteAccessCIDRParameter:
-        default: "Allowed CIDR block for external access to the instances"
+        default: "CIDR block for remote access"
       InstanceTypeParameter:
         default: "EC2 instance type for IRIS nodes"
       PrivateSubnet1CIDR:
-        default: Private Subnet 1 CIDR
+        default: Private subnet 1 CIDR
       PrivateSubnet2CIDR:
-        default: Private Subnet 2 CIDR
+        default: Private subnet 2 CIDR
       PrivateSubnet3CIDR:
-        default: Private Subnet 3 CIDR
+        default: Private subnet 3 CIDR
       SshKeyParameter:
-        default: "SSH Key Pair name to connect to EC2 instances"
+        default: "SSH key-pair name to connect to EC2 instances"
       IRISPasswordParameter:
-        default: "Password for SuperUser/_SYSTEM user"
+        default: "IRIS password"
       S3BucketNameParameter:
-        default: "S3 bucket with IRIS binaries"
+        default: "IRIS S3 bucket name"
       QSS3BucketName:
-        default: Quick Start S3 Bucket Name
+        default: Quick Start S3 bucket name
       QSS3BucketRegion:
-        default: Quick Start S3 Bucket Region
+        default: Quick Start S3 bucket Region
       QSS3KeyPrefix:
-        default: Quick Start S3 Key Prefix
+        default: Quick Start S3 key prefix
       VPCCIDR:
         default: VPC CIDR
 Parameters:
   AvailabilityZones:
-    Description: 'List of Availability Zones to use for the subnets in the VPC. Note:
-      The logical order is preserved and 3 AZs are used for this deployment.'
+    Description: 'Availability Zones to use for the subnets in the VPC. The logical order is preserved. This deployment uses 3 Availability Zones.'
     Type: List<AWS::EC2::AvailabilityZone::Name>
   SshKeyParameter:
-    Description: SSH Keypair to login to the instance
+    Description: SSH key pair to log in to the instances.
     #Default: anton-isc
     Type: AWS::EC2::KeyPair::KeyName
   RemoteAccessCIDRParameter:
 #    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
 #    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/x
-    Description: Restrict to <your-own-ip>/32 for better security
+    Description: Allowed CIDR block for external access to the instances. Restrict this to <your-own-ip>/32 for better security.
     Default: 0.0.0.0/0
     Type: String
   IRISPasswordParameter:
-    Description: Admin Password for IRIS (at least 4 alphanumeric characters)
+    Description: Password for the IRIS administrator (SuperUser/_SYSTEM user). Use at least 4 alphanumeric characters.
     Type: String
     NoEcho: true
     MinLength: 4
     MaxLength: 32
 #    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
   S3BucketNameParameter:
-    Description: S3 Bucket with IRIS binaries
+    Description: S3 bucket with IRIS binaries.
     Type: String
     Default: ''
   InstanceTypeParameter:
-    Description: Cluster node instance type
+    Description: Cluster node instance type.
     Type: String
     Default: m5.large
     AllowedValues: 
@@ -102,40 +100,39 @@ Parameters:
 #    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
     Default: 10.0.1.0/24
-    Description: CIDR block for private subnet 1 located in Availability Zone 1.
+    Description: CIDR block for the private subnet located in Availability Zone 1.
     Type: String
   PrivateSubnet2CIDR:
 #    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
     Default: 10.0.2.0/24
-    Description: CIDR block for private subnet 2 located in Availability Zone 2.
+    Description: CIDR block for the private subnet located in Availability Zone 2.
     Type: String
   PrivateSubnet3CIDR:
     Default: 10.0.3.0/24
-    Description: CIDR block for private subnet 3 located in Availability Zone 3.
+    Description: CIDR block for the private subnet located in Availability Zone 3.
     Type: String
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    ConstraintDescription: Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-) but should not end with forward slash (/)
+    ConstraintDescription: The Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).
     Default: aws-quickstart
-    Description: S3 bucket name for the IRIS Quick Start assets.
+    Description: Name of the S3 bucket for your copy of the Quick Start assets. Keep the default name unless you are customizing the template. Changing the name updates code references to point to a new Quick Start location. This name can include numbers, lowercase letters, uppercase letters, and hyphens, but do not start or end with a hyphen (-). See https://aws-quickstart.github.io/option1.html.
     Type: String
   QSS3BucketRegion:
     Default: 'us-east-1'
-    Description: 'The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.'
+    Description: 'AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. Keep the default Region unless you are customizing the template. Changing this Region updates code references to point to a new Quick Start location. When using your own bucket, specify the Region. See https://aws-quickstart.github.io/option1.html.'
     Type: String
   QSS3KeyPrefix:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
-    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
-      uppercase letters, hyphens (-), and forward slash (/).
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/).
     Default: quickstart-intersystems-iris/
-    Description: S3 key prefix for the IRIS Quick Start assets.
+    Description: S3 key prefix that is used to simulate a directory for your copy of the Quick Start assets. Keep the default prefix unless you are customizing the template. Changing this prefix updates code references to point to a new Quick Start location. This prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/). See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html and https://aws-quickstart.github.io/option1.html.
     Type: String
   VPCCIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
     Default: 10.0.0.0/16
-    Description: CIDR Block for the VPC
+    Description: CIDR block for the VPC.
     Type: String
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
