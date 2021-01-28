@@ -42,7 +42,7 @@ The IRIS Management Portal for the instance should be available at http://localh
 
 //TODO Dave, In the first step above, what "Health Check" section are we referring to? If it's a section in the guide, please copy the heading text and bracket it <<like this>> to make a clickable link.
 
-//TODO Dave, What does "instance/Availability Zone outage" mean?
+//TODO Dave, How would we restate "instance/Availability Zone outage" to eliminate the slash?
 
 //TODO Dave, Might some people appreciate more context before starting this failover test? Might they want any clarification on how to do each step (and why)?
 
