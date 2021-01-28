@@ -17,6 +17,7 @@ $ ssh -J ec2-user@<bastion-public-ip> ec2-user@<node01-private-ip> -L 52773:<nod
 The IRIS Management Portal for the instance should be available at http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen with the following credentials:
 
 //TODO Dave, The preceding URL doesn't work for me. What should it be?
+//That is a private URL, it will only work from within the deployed environment
 
 * User: SuperUser
 * Password: <password you entered at stack creation>
@@ -30,22 +31,28 @@ The IRIS Management Portal for the instance should be available at http://localh
 
 === Failover test
 
-. On node 2, navigate to the **Management Portal** (see "Health Check" section above). 
+This Quick Start is architected to be highly-available, meaning the site will remain available in the case of an instance or Availability Zone failure. In order to verify high availability, follow the following steps to simulate a failure and perform a failover test.
+
+. On node 2, navigate to the **Management Portal** (see <<Test the deployment>> section above). 
 
 . Open the **Configuration**, **Edit Mirror** page. At the bottom of the page you should see "This member is the backup. Changes must be made on the primary."
 
 . Locate the node 1 instance in the AWS EC2 management dashboard. Its name has the format `MyStackName-Node01-1NG<XXXXXX>`.
 
-. Restart the node 1 instance. This will simulate an instance/Availability Zone outage.
+. Restart the node 1 instance. This will simulate an instance or Availability Zone outage.
 
 . Reload the node 2 **Edit Mirror** page. The status should change to this: "This member is the primary. Changes will be sent to other members."
 
-//TODO Dave, In the first step above, what "Health Check" section are we referring to? If it's a section in the guide, please copy the heading text and bracket it <<like this>> to make a clickable link.
+//TODO Dave, In the first step above, what "Health Check" section are we referring to? If it's a section in the guide, please copy the heading text and bracket it <<like this>> to make a clickable link. 
+// Fixed
 
 //TODO Dave, How would we restate "instance/Availability Zone outage" to eliminate the slash?
+// FIxed
 
 //TODO Dave, Might some people appreciate more context before starting this failover test? Might they want any clarification on how to do each step (and why)?
+// Added context
 
 //TODO Dave, In the .yaml file's description for VpcIdParameter, I've added "(e.g., vpc-0343606e)" from another deployment guide in case it's helpful to give an example ... but does this example work here as is?
+// I think it's unncesessary. They already stated that the EC2 instance name will be in the format "MyStackName-Node01-1NGXXXXXX"
 
 //TODO Dave, In the .yaml file's description for InstanceSubnetIdParameter, might people benefit from guidance on choosing 3 subnets? (In fact, please check for any other parameter descriptions that could benefit from additional guidance; we recently heard that this is sometimes the case with our descriptions. Thanks!)

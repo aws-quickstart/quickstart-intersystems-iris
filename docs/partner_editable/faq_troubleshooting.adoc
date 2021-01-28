@@ -22,7 +22,10 @@ For additional information, see https://docs.aws.amazon.com/AWSCloudFormation/la
 
 == Troubleshooting
 
-For command line access, connect to the IRIS nodes using the bastion host (replacing the bracketed text):
+The IRIS Management Portal for the instance should be available at `http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen` Credentials - User: SuperUser, and the password you entered at stack creation.
+If the IRIS Management Portal is inaccessible, troubleshooting the IRIS installation can be done from the command line.
+
+1. For command line access, connect to the IRIS nodes using the bastion host (replacing the bracketed text):
 
 [source,bash]
 ----
@@ -31,19 +34,20 @@ $ ssh-add <my-ec2-key>.pem
 $ ssh -J ec2-user@<bastion-public-ip> ec2-user@<node-private-ip> -L 52773:<node-private-ip>:52773
 ----
 
-After that, the IRIS Management Portal for the instance would be available at `http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen` Credentials - User: SuperUser, and the password you entered at stack creation.
-
-Connect to the EC2 node instances by using SSH. Verify that IRIS is running:
+[start=2]
+2. Connect to the EC2 node instances by using SSH. Verify that IRIS is running:
 
 [source,bash]
 $iris list
 
-If you don't see any active IRIS instances, or if the message `iris: command not found` appears, then IRIS installation has failed. Check this on the instance to identify any problems with the IRIS installation during instance first start:
+[start=3]
+3. If you don't see any active IRIS instances, or if the message `iris: command not found` appears, then IRIS installation has failed. View this log file on the instance to identify any problems with the IRIS installation during instance first start:
 
 [source,bash]
 $cat /var/log/cloud-init-output.log
 
-To connect to the IRIS command prompt use:
+[start-4]
+4. To connect to the IRIS command prompt use:
 
 [source,bash]
 $ iris session iris
@@ -55,3 +59,4 @@ Contact InterSystems Support.
 If EC2 instances are not available or reachable, contact AWS Support. 
 
 //TODO Dave, In this Troubleshooting section, I'm not clear on whether we have any steps or whether these are individual issues. Would you please number the steps if they're steps, or otherwise adjust to clarify?
+// I've re-written the section
