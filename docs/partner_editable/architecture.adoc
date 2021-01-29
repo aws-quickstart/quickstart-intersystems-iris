@@ -19,12 +19,9 @@ internet access for resources in the private subnets.*
 ** A Linux bastion host in an Auto Scaling group to allow inbound Secure
 Shell (SSH) access to Amazon Elastic Compute Cloud (Amazon EC2) instances in public and private subnets. If this bastion host becomes unavailable, a second host is provisioned.*
 * In the private subnets:
-** Two EC2 instances running as IRIS mirror nodes in a security group: node 1 in Availability Zone 1 and node 2 in Availability Zone 2. [Describe what the solid and dashed arrows represent, using the terms "mirror data traffic" and "mirror health check" as in the footnotes: ____.]
-** One EC2 instance acting as a mirror arbiter in the third Availability Zone. [Describe what the dashed arrows represent, using the term "mirror health check" as in the footnotes: ____.]
+** Two EC2 instances running as IRIS mirror nodes in a security group: node 1 in Availability Zone 1 and node 2 in Availability Zone 2. Data is replicated in real time between the nodes.
+** One EC2 instance acting as a mirror arbiter in the third Availability Zone. The arbiter performs a heartbeat check against the two mirror nodes to determine when a node is offline.
 * A Network Load Balancer, which distributes inbound traffic across the workload instances that you want to protect from outside access.
-* Amazon CloudWatch, which _____.
-* AWS CloudTrail, which ____.
-* Amazon S3, which _____.
 
 [.small]#*The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.#
 
