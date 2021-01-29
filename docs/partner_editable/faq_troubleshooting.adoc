@@ -46,7 +46,7 @@ $iris list
 [source,bash]
 $cat /var/log/cloud-init-output.log
 
-[start-4]
+[start=4]
 4. To connect to the IRIS command prompt use:
 
 [source,bash]
@@ -57,6 +57,3 @@ Consult InterSystems IRIS Management and Monitoring guide: https://docs.intersys
 Contact InterSystems Support.
 
 If EC2 instances are not available or reachable, contact AWS Support. 
-
-//TODO Dave, In this Troubleshooting section, I'm not clear on whether we have any steps or whether these are individual issues. Would you please number the steps if they're steps, or otherwise adjust to clarify?
-// I've re-written the section

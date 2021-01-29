@@ -1,9 +1,4 @@
-// If no preperation is required, remove all content from here
-
-//TODO Dave, I think that the key-pair blurb is now generated dynamically from the latest boilerplate when applicable. Can we delete the above paragraph?
-// Deleted
-
-==== Aquire {partner-product-name} binaries and license key
+==== Acquire {partner-product-name} binaries and license key
 
 InterSystems IRIS binaries are available to InterSystems customers at https://wrc.intersystems.com/. Log in with your InterSystems Worldwide Response Center (WRC) credentials and follow the links to **Actions**, **SW Distributions**, **InterSystems IRIS**. This Quick Start deployment guide is written for the InterSystems IRIS 2020.1 build 215. IRIS binaries file names are of the format `ISCAgent-2020.1.0.215.0-lnxrhx64.tar.gz` and `IRIS-2020.1.0.215.1-lnxrhx64.tar.gz`.
 

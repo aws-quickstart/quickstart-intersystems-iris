@@ -56,7 +56,7 @@ Metadata:
         default: Quick Start S3 key prefix
 Parameters:
   VpcIdParameter:
-    Description: ID of the VPC to launch EC2 instances into (e.g., vpc-0343606e).
+    Description: ID of the VPC to launch EC2 instances into.
     Type: AWS::EC2::VPC::Id
   InstanceSubnetIdParameter:
     Description: 3 subnets in separate Availability Zones.
