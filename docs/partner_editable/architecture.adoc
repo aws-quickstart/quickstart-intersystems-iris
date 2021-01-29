@@ -6,11 +6,11 @@ AWS Cloud.
 :xrefstyle: short
 [#architecture1]
 .Quick Start architecture for _{partner-product-short-name}_ on AWS
-image::../images/iris_architecture_diagram.png[Architecture]
+image::../images/intersystems_iris_architecture_diagram.png[Architecture]
 
 As shown in <<architecture1>>, the Quick Start sets up the following:
 
-* A highly available architecture that spans three Availability Zones.*
+* An architecture that spans three Availability Zones.*
 * A VPC configured with public and private subnets, according to AWS
 best practices, to provide you with your own virtual network on AWS.*
 * In the public subnets:
@@ -20,9 +20,7 @@ internet access for resources in the private subnets.*
 Shell (SSH) access to Amazon Elastic Compute Cloud (Amazon EC2) instances in public and private subnets. If this bastion host becomes unavailable, a second host is provisioned.*
 * In the private subnets:
 ** Two EC2 instances running as IRIS mirror nodes in a security group: node 1 in Availability Zone 1 and node 2 in Availability Zone 2. Data is replicated in real time between the nodes.
-** One EC2 instance acting as a mirror arbiter in the third Availability Zone. The arbiter performs a heartbeat check against the two mirror nodes to determine when a node is offline.
+** One EC2 instance acting as a mirror arbiter in the third Availability Zone. The arbiter checks the health of the two mirror nodes and detects when a node is offline.
 * A Network Load Balancer, which distributes inbound traffic across the workload instances that you want to protect from outside access.
 
 [.small]#*The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.#
-
-//TODO Dave, Please fill in the blanks in the preceding bullet list. 

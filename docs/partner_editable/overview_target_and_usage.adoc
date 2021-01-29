@@ -4,4 +4,6 @@
 
 This guide provides instructions for deploying the {partner-product-name} Quick Start reference architecture on the AWS Cloud.
 
-IRIS is a database engine that supports transactional, analytic, and transactional-analytic applications. It's mainly used in healthcare and financial services. This Quick Start is for users who want to install the InterSystems IRIS data platform on their own AWS account according to InterSystems and AWS best practices. 
+The InterSystems IRIS data platform, used mainly in healthcare and financial services, supports rapid ingestion of data from various sources and sophisticated analytics. This Quick Start is for users who want to install IRIS on their own AWS account according to InterSystems and AWS best practices. 
+
+With the InterSystems IRIS data platform, you can build high-performance, machine learning (ML)-enabled applications that connect data and application silos. Specifically, IRIS is a database engine that supports transactional, analytic, and transactional-analytic applications. Transactional applications deal with real-time data. Analytic applications deal with historical and other non-real-time data. Transactional-analytic applications make it possible for organizations to use insights gleaned from their data in real time.

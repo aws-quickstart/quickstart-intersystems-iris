@@ -4,8 +4,9 @@
 
 *Q.* I encountered a *CREATE_FAILED* error when I launched the Quick Start.
 
-*A.* If AWS CloudFormation fails to create the stack, we recommend that you relaunch the template with *Rollback on failure* set to *Disabled*. (This setting is under *Advanced* in the AWS CloudFormation console, *Options* page.) With this setting, the stack’s state is retained and the instance is left running, so you can troubleshoot the issue. (For Windows, look at the log files in `%ProgramFiles%\Amazon\EC2ConfigService` and `C:\cfn\log`.)
-// If you’re deploying on Linux instances, provide the location for log files on Linux, or omit this sentence.
+*A.* If AWS CloudFormation fails to create the stack, relaunch the template with *Rollback on failure* set to *Disabled*. This setting is under *Advanced* in the AWS CloudFormation console on the *Configure stack options* page. With this setting, the stack’s state is retained, and the instance keeps running so that you can troubleshoot the issue. The log files `cloud-init.log` and `cloud-init-output.log` are located at `/var/log/`.
+
+// Since we’re deploying on Linux instances, Dave provided the location for log files on Linux in the preceding sentence.
 
 WARNING: When you set *Rollback on failure* to *Disabled*, you continue to incur AWS charges for this stack. Delete the stack when you finish troubleshooting.
 
@@ -25,7 +26,7 @@ For additional information, see https://docs.aws.amazon.com/AWSCloudFormation/la
 The IRIS Management Portal for the instance should be available at `http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen` Credentials - User: SuperUser, and the password you entered at stack creation.
 If the IRIS Management Portal is inaccessible, troubleshooting the IRIS installation can be done from the command line.
 
-1. For command line access, connect to the IRIS nodes using the bastion host (replacing the bracketed text):
+. For command-line access, connect to the IRIS nodes using the bastion host (replacing the bracketed text):
 
 [source,bash]
 ----
@@ -35,24 +36,24 @@ $ ssh -J ec2-user@<bastion-public-ip> ec2-user@<node-private-ip> -L 52773:<node-
 ----
 
 [start=2]
-2. Connect to the EC2 node instances by using SSH. Verify that IRIS is running:
+. Connect to the EC2 node instances by using SSH. Verify that IRIS is running:
 
 [source,bash]
 $iris list
 
 [start=3]
-3. If you don't see any active IRIS instances, or if the message `iris: command not found` appears, then IRIS installation has failed. View this log file on the instance to identify any problems with the IRIS installation during instance first start:
+. If you don't see any active IRIS instances, or if the message `iris: command not found` appears, then IRIS installation has failed. View this log file on the instance to identify any problems with the IRIS installation during instance first start:
 
 [source,bash]
 $cat /var/log/cloud-init-output.log
 
 [start=4]
-4. To connect to the IRIS command prompt use:
+. To connect to the IRIS command prompt use:
 
 [source,bash]
 $ iris session iris
 
-Consult InterSystems IRIS Management and Monitoring guide: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM
+Consult the https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM[InterSystems IRIS Management and Monitoring guide^].
 
 Contact InterSystems Support.
 

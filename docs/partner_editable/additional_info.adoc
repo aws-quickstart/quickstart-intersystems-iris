@@ -22,7 +22,7 @@ The IRIS Management Portal for the instance should be available at http://localh
 * Password: <password you entered at stack creation>
 
 [start=2]
-. Navigate to **System Administration**, **Configuration**, **Mirror Settings**, **Edit Mirror**. Make sure the system is configured with two failover members.
+. Navigate to **System Administration**, **Configuration**, **Mirror Settings**, **Edit Mirror**.  Make sure that the system is configured with two failover members.
 
 . Navigate to **System Administration**, **Configuration**, **Local Databases**. Verify that the mirrored database is created and active.
 
@@ -36,7 +36,7 @@ This Quick Start is architected to be highly available. This means that the site
 
 . Open the **Configuration**, **Edit Mirror** page. At the bottom of the page you should see "This member is the backup. Changes must be made on the primary."
 
-. Locate the node 1 instance in the AWS EC2 management dashboard. Its name has the format `MyStackName-Node01-1NG<XXXXXX>`.
+. Locate the node 1 instance in the Amazon EC2 management dashboard. Its name has the format `MyStackName-Node01-1NG<XXXXXX>`.
 
 . Restart the node 1 instance. This will simulate an instance or Availability Zone outage.
 
