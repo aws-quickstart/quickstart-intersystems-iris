@@ -1,16 +1,5 @@
 // Replace the content in <>
 // Describe or link to specific knowledge requirements; for example: “familiarity with basic concepts in the areas of networking, database operations, and data encryption” or “familiarity with <software>.”
 
-.Knowledge of the following AWS services is required:
-
-* http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html[Amazon Elastic Compute Cloud (Amazon EC2)]
-* http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html[AWS CloudFormation]
-* https://aws.amazon.com/s3/[AWS Simple Storage Service (S3)]
-
-.Knowledge of the following AWS services is recommended:
-
-* http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Introduction.html[Amazon Virtual Private Cloud (Amazon VPC)]
-* https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html[AWS Elastic Load Balancing]
-
-_Note: Individuals possessing the_ https://aws.amazon.com/certification[_AWS Associate certifications_] _should have a sufficient depth of knowledge._
+If you have an AWS Associate certification, you should have sufficient knowledge to deploy this Quick Start. See https://aws.amazon.com/certification[AWS Certification^].
 

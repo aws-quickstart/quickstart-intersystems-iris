@@ -1,11 +1,7 @@
-# InterSystems IRIS on the AWS Cloud
+## InterSystems IRIS on the AWS Cloud—Quick Start
 
-This Quick Start reference deployment guide provides step-by-step instructions for deploying IRIS on the AWS Cloud.
+For architectural details, step-by-step instructions, and customization options, see the [deployment guide](https://aws-quickstart.github.io/quickstart-intersystems-iris/).
 
-This Quick Start is for users who are installing InterSystems IRIS® data platform on their own AWS account, according to InterSystems and AWS best practices.
+To post feedback, submit feature ideas, or report bugs, use the **Issues** section of this GitHub repo.
 
-The InterSystems IRIS Data Platform makes it easier to build high-performance, machine learning-enabled applications that connect data and application silos. With this QuickStart IRIS is deployed into your AWS account in a highly avaliable configuration using mirroring in multiple Avaiability Zones.
-
-Deploying this Quick Start for a new virtual private cloud (VPC) with default parameters builds the following IRIS environment in the AWS Cloud:
-
-![architecture](https://aws-quickstart.github.io/quickstart-intersystems-iris/images/architecture_diagram_iris.png)
+To submit code for this Quick Start, see the [AWS Quick Start Contributor's Kit](https://aws-quickstart.github.io/).

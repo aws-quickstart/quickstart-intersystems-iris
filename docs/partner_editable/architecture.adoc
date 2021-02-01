@@ -1,29 +1,26 @@
 Deploying this Quick Start for a new virtual private cloud (VPC) with
-default parameters builds the following _{partner-product-short-name}_ environment in the
+default parameters builds the following {partner-product-short-name} environment in the
 AWS Cloud.
 
 // Replace this example diagram with your own. Send us your source PowerPoint file. Be sure to follow our guidelines here : http://(we should include these points on our contributors giude)
+:xrefstyle: short
 [#architecture1]
 .Quick Start architecture for _{partner-product-short-name}_ on AWS
-[link=images/architecture_diagram_iris.png]
-image::../images/architecture_diagram_iris.png[Architecture,width=648,height=439]
+image::../images/intersystems_iris_architecture_diagram.png[Architecture]
 
-As shown in Figure 1, the Quick Start sets up the following:
+As shown in <<architecture1>>, the Quick Start sets up the following:
 
-* A highly available architecture that spans three Availability Zones.*
+* An architecture that spans three Availability Zones.*
 * A VPC configured with public and private subnets, according to AWS
 best practices, to provide you with your own virtual network on AWS.*
-* Two EC2 instances running as IRIS mirror nodes in two different Availability Zones.
-* An EC2 instance in a third Availabiltiy Zone acting as a mirror arbiter.
-
-In the public subnets:
-
-* Managed network address translation (NAT) gateways to allow outbound
+* In the public subnets:
+** Managed network address translation (NAT) gateways (not shown) to allow outbound
 internet access for resources in the private subnets.*
-* A Linux bastion host in an Auto Scaling group to allow inbound Secure
-Shell (SSH) access to EC2 instances in public and private subnets.*
-* A network load balancer.
+** A Linux bastion host in an Auto Scaling group to allow inbound Secure
+Shell (SSH) access to Amazon Elastic Compute Cloud (Amazon EC2) instances in public and private subnets. If this bastion host becomes unavailable, a second host is provisioned.*
+* In the private subnets:
+** Two Amazon EC2 instances running as IRIS mirror nodes 1 and 2 in a security group across Availability Zones 1 and 2. Data is replicated in real time between the nodes.
+** One Amazon EC2 instance acting as a mirror arbiter in the third Availability Zone. The arbiter checks the health of the two mirror nodes and detects when a node is offline.
+* A Network Load Balancer, which distributes inbound traffic across the workload instances that you want to protect from outside access.
 
-*The template that deploys the Quick Start into an existing VPC skips
-the components marked by asterisks and prompts you for your existing VPC
-configuration.
+[.small]#*The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.#
