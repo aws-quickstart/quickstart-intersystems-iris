@@ -2,9 +2,7 @@
 
 InterSystems IRIS binaries are available to InterSystems customers at https://wrc.intersystems.com/. Log in with your InterSystems Worldwide Response Center (WRC) credentials and follow the links to **Actions**, **SW Distributions**, **InterSystems IRIS**. This Quick Start deployment guide is written for the InterSystems IRIS 2020.1 build 215. IRIS binaries file names are of the format `ISCAgent-2020.1.0.215.0-lnxrhx64.tar.gz` and `IRIS-2020.1.0.215.1-lnxrhx64.tar.gz`.
 
-You should be able to use your existing InterSystems IRIS license key (iris.key) or request one from the https://evaluation.intersystems.com/[IRIS Evaluation Service^]. The Quick Start requires the noncontainer version of the key and binaries. 
-
-Nonregistered customers can https://www.intersystems.com/who-we-are/contact-us/[contact InterSystems^].
+For more information, see the <<Software licenses>> section.
 
 
 ==== Prepare for the deployment
