@@ -2,4 +2,4 @@
 // Briefly describe the software. Use consistent and clear branding. 
 // Include the benefits of using the software on AWS, and provide details on usage scenarios.
 
-This QuickStart deploys IRIS into your AWS account in a highly available configuration using mirroring in multiple Availability Zones.
+This Quick Start deploys IRIS into your AWS account in a highly available configuration using mirroring in multiple Availability Zones.
