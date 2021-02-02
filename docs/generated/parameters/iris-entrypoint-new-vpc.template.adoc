@@ -1,34 +1,34 @@
 
-.IRIS Configuration
+.IRIS configuration
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
-|Parameter label (name) |Default value|Description|Password for SuperUser/_SYSTEM user
-(`IRISPasswordParameter`)|`**__Requires input__**`|Admin Password for IRIS (at least 4 alphanumeric characters)|S3 bucket with IRIS binaries
-(`S3BucketNameParameter`)|`**__Blank string__**`|S3 Bucket with IRIS binaries
+|Parameter label (name) |Default value|Description|IRIS password
+(`IRISPasswordParameter`)|`**__Requires input__**`|Password for the IRIS administrator (SuperUser/_SYSTEM user). Use at least 4 alphanumeric characters.|IRIS S3 bucket name
+(`S3BucketNameParameter`)|`**__Blank string__**`|S3 bucket with IRIS binaries.
 |===
-.Network Configuration
+.Network configuration
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|Availability Zones
-(`AvailabilityZones`)|`**__Requires input__**`|List of Availability Zones to use for the subnets in the VPC. Note: The logical order is preserved and 3 AZs are used for this deployment.|Allowed CIDR block for external access to the instances
-(`RemoteAccessCIDRParameter`)|`0.0.0.0/0`|Restrict to <your-own-ip>/32 for better security|VPC CIDR
-(`VPCCIDR`)|`10.0.0.0/16`|CIDR Block for the VPC|Private Subnet 1 CIDR
-(`PrivateSubnet1CIDR`)|`10.0.1.0/24`|CIDR block for private subnet 1 located in Availability Zone 1.|Private Subnet 2 CIDR
-(`PrivateSubnet2CIDR`)|`10.0.2.0/24`|CIDR block for private subnet 2 located in Availability Zone 2.|Private Subnet 3 CIDR
-(`PrivateSubnet3CIDR`)|`10.0.3.0/24`|CIDR block for private subnet 3 located in Availability Zone 3.
+(`AvailabilityZones`)|`**__Requires input__**`|Availability Zones to use for the subnets in the VPC. The logical order is preserved. This deployment uses 3 Availability Zones.|CIDR block for remote access
+(`RemoteAccessCIDRParameter`)|`0.0.0.0/0`|Allowed CIDR block for external access to the instances. Restrict this to <your-own-ip>/32 for better security.|VPC CIDR
+(`VPCCIDR`)|`10.0.0.0/16`|CIDR block for the VPC.|Private subnet 1 CIDR
+(`PrivateSubnet1CIDR`)|`10.0.1.0/24`|CIDR block for the private subnet located in Availability Zone 1.|Private subnet 2 CIDR
+(`PrivateSubnet2CIDR`)|`10.0.2.0/24`|CIDR block for the private subnet located in Availability Zone 2.|Private subnet 3 CIDR
+(`PrivateSubnet3CIDR`)|`10.0.3.0/24`|CIDR block for the private subnet located in Availability Zone 3.
 |===
-.EC2 Instance Configuration
+.EC2 instance configuration
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|EC2 instance type for IRIS nodes
-(`InstanceTypeParameter`)|`m5.large`|Cluster node instance type|SSH Key Pair name to connect to EC2 instances
-(`SshKeyParameter`)|`**__Requires input__**`|SSH Keypair to login to the instance
+(`InstanceTypeParameter`)|`m5.large`|Cluster node instance type.|SSH key-pair name to connect to EC2 instances
+(`SshKeyParameter`)|`**__Requires input__**`|SSH key pair to log in to the instances.
 |===
-.AWS Quick Start Configuration
+.AWS Quick Start configuration
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
-|Parameter label (name) |Default value|Description|Quick Start S3 Bucket Name
-(`QSS3BucketName`)|`aws-quickstart`|S3 bucket name for the IRIS Quick Start assets.|Quick Start S3 Key Prefix
-(`QSS3KeyPrefix`)|`quickstart-intersystems-iris/`|S3 key prefix for the IRIS Quick Start assets.|Quick Start S3 Bucket Region
-(`QSS3BucketRegion`)|`us-east-1`|The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.
+|Parameter label (name) |Default value|Description|Quick Start S3 bucket name
+(`QSS3BucketName`)|`aws-quickstart`|Name of the S3 bucket for your copy of the Quick Start assets. Keep the default name unless you are customizing the template. Changing the name updates code references to point to a new Quick Start location. This name can include numbers, lowercase letters, uppercase letters, and hyphens, but do not start or end with a hyphen (-). See https://aws-quickstart.github.io/option1.html.|Quick Start S3 bucket Region
+(`QSS3BucketRegion`)|`us-east-1`|AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. Keep the default Region unless you are customizing the template. Changing this Region updates code references to point to a new Quick Start location. When using your own bucket, specify the Region. See https://aws-quickstart.github.io/option1.html.|Quick Start S3 key prefix
+(`QSS3KeyPrefix`)|`quickstart-intersystems-iris/`|S3 key prefix that is used to simulate a directory for your copy of the Quick Start assets. Keep the default prefix unless you are customizing the template. Changing this prefix updates code references to point to a new Quick Start location. This prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/). See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html and https://aws-quickstart.github.io/option1.html.
 |===

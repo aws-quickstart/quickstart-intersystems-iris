@@ -791,7 +791,7 @@ p.footer-text a{color:#d7d8d8}
 <ul class="sectlevel1">
 <li><a href="#_overview">Overview</a></li>
 <li><a href="#_intersystems_iris_on_aws">InterSystems IRIS on AWS</a></li>
-<li><a href="#_cost">Cost</a></li>
+<li><a href="#_aws_costs">AWS costs</a></li>
 <li><a href="#_software_licenses">Software licenses</a></li>
 <li><a href="#_architecture">Architecture</a></li>
 <li><a href="#_planning_the_deployment">Planning the deployment</a>
@@ -805,18 +805,22 @@ p.footer-text a{color:#d7d8d8}
 <ul class="sectlevel2">
 <li><a href="#_sign_in_to_your_aws_account">Sign in to your AWS account</a></li>
 <li><a href="#_launch_the_quick_start">Launch the Quick Start</a></li>
-<li><a href="#_launch_into_a_new_vpc">Launch into a new VPC</a></li>
-<li><a href="#_launch_into_an_existing_vpc">Launch into an existing VPC</a></li>
 </ul>
 </li>
-<li><a href="#_post_deployment_steps">Post deployment steps</a>
+<li><a href="#_post_deployment_steps">Post-deployment steps</a>
 <ul class="sectlevel2">
 <li><a href="#_test_the_deployment">Test the deployment</a></li>
-<li><a href="#_failover_test">Failover Test</a></li>
+<li><a href="#_failover_test">Failover test</a></li>
 </ul>
 </li>
 <li><a href="#_faq">FAQ</a></li>
 <li><a href="#_troubleshooting">Troubleshooting</a></li>
+<li><a href="#_parameter_reference">Parameter reference</a>
+<ul class="sectlevel2">
+<li><a href="#_parameters_for_deploying_into_a_new_vpc">Parameters for deploying into a new VPC</a></li>
+<li><a href="#_parameters_for_deploying_into_an_existing_vpc">Parameters for deploying into an existing VPC</a></li>
+</ul>
+</li>
 <li><a href="#_send_us_feedback">Send us feedback</a></li>
 <li><a href="#_quick_start_reference_deployments">Quick Start reference deployments</a></li>
 <li><a href="#_github_repository">GitHub repository</a></li>
@@ -835,9 +839,9 @@ p.footer-text a{color:#d7d8d8}
 </div>
 </div>
 <div class="paragraph text-center">
-<p><strong>November 2020</strong><br>
-<em>Anton Umnikov, Senior Cloud Solutions Architect - InterSystems Corp.</em><br>
-<em>Jim Smith - AWS Global Partner SA, Joe Jones - Technical Product Manager, Dave May, Partner Solutions Architect (Quick Start team)</em></p>
+<p><strong>February 2021</strong><br>
+<em>Anton Umnikov, InterSystems Corp.</em><br>
+<em>Dave May, AWS Quick Start team</em></p>
 </div>
 <div class="admonitionblock tip text-left">
 <table>
@@ -861,10 +865,13 @@ report bugs, or submit feature ideas for this Quick Start.
 <h2 id="_overview">Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This Quick Start reference deployment guide provides step-by-step instructions for deploying IRIS on the AWS Cloud.</p>
+<p>This guide provides instructions for deploying the InterSystems IRIS Quick Start reference architecture on the AWS Cloud.</p>
 </div>
 <div class="paragraph">
-<p>This Quick Start is for users who are installing InterSystems IRIS® data platform on their own AWS account, according to InterSystems and AWS best practices.</p>
+<p>The InterSystems IRIS data platform, used mainly in healthcare and financial services, supports rapid ingestion of data from various sources and sophisticated analytics. This Quick Start is for users who want to install IRIS on their own AWS account according to InterSystems and AWS best practices.</p>
+</div>
+<div class="paragraph">
+<p>With the InterSystems IRIS data platform, you can build high-performance, machine learning applications that connect data and application silos. Specifically, IRIS is a database engine that supports transactional, analytical, and transactional-analytical applications. Transactional applications deal with real-time data. Analytical applications deal with historical (non-real-time) data. Transactional-analytical applications make it possible for organizations to use insights gleaned from both real-time and historical data.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -884,16 +891,15 @@ Amazon may share user-deployment information with the AWS Partner that collabora
 <h2 id="_intersystems_iris_on_aws">InterSystems IRIS on AWS</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>InterSystems IRIS Data Platform makes it easier to build high-performance, machine learning-enabled applications that connect data and application silos. With this Quick Start, IRIS is deployed into your AWS account in a highly avaliable configuration using mirroring in multiple Avaiability Zones.</p>
+<p>This QuickStart deploys IRIS into your AWS account in a highly available configuration using mirroring in multiple Availability Zones.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_cost">Cost</h2>
+<h2 id="_aws_costs">AWS costs</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You are responsible for the cost of the AWS services used while running
-this Quick Start. There is no additional cost for
+<p>You are responsible for the cost of the AWS services and any paid third-party licenses used while running this Quick Start. There is no additional cost for
 using the Quick Start.</p>
 </div>
 <div class="paragraph">
@@ -920,10 +926,7 @@ After you deploy the Quick Start, <a href="https://docs.aws.amazon.com/awsaccoun
 <h2 id="_software_licenses">Software licenses</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This deployment requires non-container version of an InterSystems IRIS license key. Supported InterSystems customers might be able to use their existing InterSystems IRIS license key (iris.key) or request one via <a href="https://evaluation.intersystems.com/">IRIS Evaluation Service</a>.</p>
-</div>
-<div class="paragraph">
-<p>Non - registered customers - please contact InterSystems at <a href="https://www.intersystems.com/who-we-are/contact-us/">Contact InterSystems</a></p>
+<p>This deployment requires a noncontainer version of an InterSystems IRIS license key. If you&#8217;re an InterSystems customer, you can use your IRIS license key (iris.key) if you have one or request one by using the <a href="https://evaluation.intersystems.com/" target="_blank" rel="noopener">IRIS Evaluation Service</a>. Otherwise, <a href="https://www.intersystems.com/who-we-are/contact-us/" target="_blank" rel="noopener">contact InterSystems</a>.</p>
 </div>
 </div>
 </div>
@@ -932,57 +935,62 @@ After you deploy the Quick Start, <a href="https://docs.aws.amazon.com/awsaccoun
 <div class="sectionbody">
 <div class="paragraph">
 <p>Deploying this Quick Start for a new virtual private cloud (VPC) with
-default parameters builds the following <em>IRIS</em> environment in the
+default parameters builds the following IRIS environment in the
 AWS Cloud.</p>
 </div>
 <div id="architecture1" class="imageblock">
 <div class="content">
-<a class="image" href="images/architecture_diagram_iris.png"><img src="images/architecture_diagram_iris.png" alt="Architecture" width="648" height="439"></a>
+<img src="images/intersystems_iris_architecture_diagram.png" alt="Architecture">
 </div>
 <div class="title">Figure 1. Quick Start architecture for <em>IRIS</em> on AWS</div>
 </div>
 <div class="paragraph">
-<p>As shown in Figure 1, the Quick Start sets up the following:</p>
+<p>As shown in <a href="#architecture1">Figure 1</a>, the Quick Start sets up the following:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>A highly available architecture that spans three Availability Zones.*</p>
+<p>An architecture that spans three Availability Zones.*</p>
 </li>
 <li>
 <p>A VPC configured with public and private subnets, according to AWS
 best practices, to provide you with your own virtual network on AWS.*</p>
 </li>
 <li>
-<p>Two EC2 instances running as IRIS mirror nodes in two different Availability Zones.</p>
-</li>
-<li>
-<p>An EC2 instance in a third Availabiltiy Zone acting as a mirror arbiter.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
 <p>In the public subnets:</p>
-</div>
 <div class="ulist">
 <ul>
 <li>
-<p>Managed network address translation (NAT) gateways to allow outbound
+<p>Managed network address translation (NAT) gateways (not shown) to allow outbound
 internet access for resources in the private subnets.*</p>
 </li>
 <li>
 <p>A Linux bastion host in an Auto Scaling group to allow inbound Secure
-Shell (SSH) access to EC2 instances in public and private subnets.*</p>
+Shell (SSH) access to Amazon Elastic Compute Cloud (Amazon EC2) instances in public and private subnets. If this bastion host becomes unavailable, a second host is provisioned.*</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
-<p>A network load balancer.</p>
+<p>In the private subnets:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Two Amazon EC2 instances running as IRIS mirror nodes 1 and 2 in a security group across Availability Zones 1 and 2. Data is replicated in real time between the nodes.</p>
+</li>
+<li>
+<p>One Amazon EC2 instance acting as a mirror arbiter in Availability Zone 3. The arbiter checks the health of the two mirror nodes and detects when a node is offline.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>A Network Load Balancer, which distributes inbound traffic across the workload instances that you want to protect from outside access.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>*The template that deploys the Quick Start into an existing VPC skips
-the components marked by asterisks and prompts you for your existing VPC
-configuration.</p>
+<p><span class="small">*The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.</span></p>
 </div>
 </div>
 </div>
@@ -992,35 +1000,13 @@ configuration.</p>
 <div class="sect2">
 <h3 id="_specialized_knowledge">Specialized knowledge</h3>
 <div class="paragraph">
-<p>This deployment requires a moderate level of familiarity with AWS services. If you’re new to AWS, visit <a href="https://aws.amazon.com/getting-started/" target="_blank" rel="noopener">Getting Started with AWS</a> and <a href="https://aws.amazon.com/training/" target="_blank" rel="noopener">Training and Certification</a>. These sites provide materials for learning how to design, deploy, and operate your infrastructure and applications on the AWS Cloud.</p>
-</div>
-<div class="ulist">
-<div class="title">Knowledge of the following AWS services is required:</div>
-<ul>
-<li>
-<p><a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html">Amazon Elastic Compute Cloud (Amazon EC2)</a></p>
-</li>
-<li>
-<p><a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html">AWS CloudFormation</a></p>
-</li>
-<li>
-<p><a href="https://aws.amazon.com/s3/">AWS Simple Storage Service (S3)</a></p>
-</li>
-</ul>
-</div>
-<div class="ulist">
-<div class="title">Knowledge of the following AWS services is recommended:</div>
-<ul>
-<li>
-<p><a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Introduction.html">Amazon Virtual Private Cloud (Amazon VPC)</a></p>
-</li>
-<li>
-<p><a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html">AWS Elastic Load Balancing</a></p>
-</li>
-</ul>
+<p>This deployment requires a moderate level of familiarity with
+AWS services. If you’re new to AWS, see <a href="https://aws.amazon.com/getting-started/" target="_blank" rel="noopener">Getting Started Resource Center</a>
+and <a href="https://aws.amazon.com/training/" target="_blank" rel="noopener">AWS Training and Certification</a>. These sites provide materials for learning how to design,
+deploy, and operate your infrastructure and applications on the AWS Cloud.</p>
 </div>
 <div class="paragraph">
-<p><em>Note: Individuals possessing the</em> <a href="https://aws.amazon.com/certification"><em>AWS Associate certifications</em></a> <em>should have a sufficient depth of knowledge.</em></p>
+<p>If you have an AWS Associate certification, you should have sufficient knowledge to deploy this Quick Start. See <a href="https://aws.amazon.com/certification" target="_blank" rel="noopener">AWS Certification</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1035,12 +1021,12 @@ configuration.</p>
 <div class="sect2">
 <h3 id="_technical_requirements">Technical requirements</h3>
 <div class="paragraph">
-<p>Before you launch the Quick Start, your account must be configured as specified in the following table. Otherwise, deployment might fail.</p>
+<p>Before you launch the Quick Start, review the following information and ensure that your account is properly configured. Otherwise, deployment might fail.</p>
 </div>
 <div class="sect3">
 <h4 id="_resource_quotas">Resource quotas</h4>
 <div class="paragraph">
-<p>If necessary, request <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-2#!/" target="_blank" rel="noopener">service quota increases</a> for the following resources. You might need to request increases if your existing deployment currently uses these resources and if this Quick Start deployment could result in exceeding the default quotas. The <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-2#!/" target="_blank" rel="noopener">Service Quotas console</a> displays your usage and quotas for some aspects of some services. For more information, see <a href="https://docs.aws.amazon.com/servicequotas/latest/userguide/intro.html" target="_blank" rel="noopener">What is Service Quotas?</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html" target="_blank" rel="noopener">AWS service quotas</a>.</p>
+<p>If necessary, request <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-2#!/" target="_blank" rel="noopener">service quota increases</a> for the following resources. You might request quota increases to avoid exceeding the default limits for any resources that are shared across multiple deployments. The <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-2#!/" target="_blank" rel="noopener">Service Quotas console</a> displays your usage and quotas for some aspects of some services. For more information, see <a href="https://docs.aws.amazon.com/servicequotas/latest/userguide/intro.html" target="_blank" rel="noopener">What is Service Quotas?</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html" target="_blank" rel="noopener">AWS service quotas</a>.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1055,11 +1041,11 @@ configuration.</p>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VPCs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VPC</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Elastic IP addresses</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Elastic IP address</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 <tr>
@@ -1067,27 +1053,27 @@ configuration.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">IAM roles</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">IAM role</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Auto Scaling groups</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Auto Scaling group</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Network Load Balancers</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Network Load Balancer</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">t2.micro instances (bastion)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">t2.micro instance (bastion)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">t3.small instances (arbiter)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">t3.small instance (arbiter)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">m5.large instances (IRIS Nodes) configurable</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">m5.large instances (IRIS nodes), configurable</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
 </tr>
 </tbody>
@@ -1096,7 +1082,68 @@ configuration.</p>
 <div class="sect3">
 <h4 id="_supported_regions">Supported Regions</h4>
 <div class="paragraph">
-<p>This Quick Start is not supported in N. California (us-west-1) as there are only two Availability Zones available.</p>
+<p>This Quick Start supports the following Regions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>us-east-1, US East (N. Virginia)</p>
+</li>
+<li>
+<p>us-east-2, US East (Ohio)</p>
+</li>
+<li>
+<p>us-west-1, US West (N. California)</p>
+</li>
+<li>
+<p>af-south-1, Africa (Cape Town)</p>
+</li>
+<li>
+<p>ap-east-1, Asia Pacific (Hong Kong)</p>
+</li>
+<li>
+<p>ap-south-1, Asia Pacific (Mumbai)</p>
+</li>
+<li>
+<p>ap-northeast-3, Asia Pacific (Osaka-Local)</p>
+</li>
+<li>
+<p>ap-northeast-2, Asia Pacific (Seoul)</p>
+</li>
+<li>
+<p>ap-southeast-1, Asia Pacific (Singapore)</p>
+</li>
+<li>
+<p>ap-southeast-2, Asia Pacific (Sydney)</p>
+</li>
+<li>
+<p>ap-northeast-1, Asia Pacific (Tokyo)</p>
+</li>
+<li>
+<p>eu-central-1, Europe (Frankfurt)</p>
+</li>
+<li>
+<p>eu-west-1, Europe (Ireland)</p>
+</li>
+<li>
+<p>eu-west-2, Europe (London)</p>
+</li>
+<li>
+<p>eu-south-1, Europe (Milan)</p>
+</li>
+<li>
+<p>eu-west-3, Europe (Paris)</p>
+</li>
+<li>
+<p>eu-north-1, Europe (Stockholm)</p>
+</li>
+<li>
+<p>me-south-1, Middle East (Bahrain)</p>
+</li>
+<li>
+<p>sa-east-1, South America (São Paulo)</p>
+</li>
+</ul>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -1105,7 +1152,7 @@ configuration.</p>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Certain Regions are available on an opt-in basis. See <a href="https://docs.aws.amazon.com/general/latest/gr/rande-manage.html" target="_blank" rel="noopener">Managing AWS Regions</a>.
+Certain Regions are available on an opt-in basis. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande-manage.html" target="_blank" rel="noopener">Managing AWS Regions</a>.
 </td>
 </tr>
 </table>
@@ -1127,30 +1174,31 @@ Certain Regions are available on an opt-in basis. See <a href="https://docs.aws.
 </div>
 </div>
 <div class="sect3">
-<h4 id="_prepare_your_aws_account">Prepare your AWS account</h4>
-<div class="paragraph">
-<p>To access the EC2 instances provisioned by this quickstart, you will need at least one EC2 Key Pair. Refer to this guide for details: <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html" class="bare">https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_aquire_intersystems_iris_binaries_and_license_key">Aquire InterSystems IRIS binaries and license key</h4>
-<div class="paragraph">
-<p>InterSystems IRIS binaries are available to InterSystems customers via <a href="https://wrc.intersystems.com/" class="bare">https://wrc.intersystems.com/</a>. Login with your WRC credentials and follow the links to Actions; SW Distributions; InterSystems IRIS. This Deployment Guide is written for the InterSystems IRIS 2020.1 build 215. IRIS binaries file names are of the format <code>ISCAgent-2020.1.0.215.0-lnxrhx64.tar.gz</code> and <code>IRIS-2020.1.0.215.1-lnxrhx64.tar.gz</code>.</p>
-</div>
-<div class="paragraph">
-<p>You should be able to use your existing InterSystems IRIS license key (iris.key) or request one via <a href="https://evaluation.intersystems.com/">IRIS Evaluation Service</a>. Note - QuickStart requires non-container version of the key and binaries.</p>
-</div>
-<div class="paragraph">
-<p>Non-registered customers - please contact InterSystems at <a href="https://www.intersystems.com/who-we-are/contact-us/">Contact InterSystems</a></p>
+<h4 id="_acquire_intersystems_iris_binaries_files_and_license_key">Acquire InterSystems IRIS binaries files and license key</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Acquire the two InterSystems IRIS binaries files. They&#8217;re available to InterSystems customers at <a href="https://wrc.intersystems.com/" class="bare">https://wrc.intersystems.com/</a>. Log in with your InterSystems Worldwide Response Center (WRC) credentials and follow the links to <strong>Actions</strong>, <strong>SW Distributions</strong>, <strong>InterSystems IRIS</strong>. This Quick Start deployment guide is written for the InterSystems IRIS 2020.1 build 215. IRIS binaries file names have the format <code>ISCAgent-2020.1.0.215.0-lnxrhx64.tar.gz</code> and <code>IRIS-2020.1.0.215.1-lnxrhx64.tar.gz</code>.</p>
+</li>
+<li>
+<p>If you don&#8217;t already have one, acquire an IRIS license key (iris.key). For details, see the <a href="#_software_licenses"><em>Software licenses</em></a> section.</p>
+</li>
+</ol>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_prepare_for_the_deployment">Prepare for the deployment</h4>
-<div class="paragraph">
-<p>Create an S3 bucket, copy the IRIS binaries files and iris.key:</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create an S3 bucket or select an existing S3 bucket where you&#8217;d like to put the two binaries files and your IRIS license key. Note this S3 bucket name; during deployment you will enter it for <code>S3BucketNameParameter</code>.</p>
+</li>
+<li>
+<p>Upload the two IRIS binaries files and your IRIS license key to the S3 bucket (replacing the bracketed text with your bucket name):</p>
+</li>
+</ol>
 </div>
 <div class="listingblock">
-<div class="title">Prepare S3 bucket</div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">BUCKET=&lt;my bucket&gt;
 aws s3 mb s3://$BUCKET
@@ -1168,7 +1216,7 @@ aws s3 cp iris.key s3://$BUCKET</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Deploy IRIS into a new VPC (end-to-end deployment)</strong>. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, bastion hosts, and other infrastructure components. It then deploys IRIS, consisting of two IRIS mirrored nodes and one Arbiter node into this new VPC.</p>
+<p><strong>Deploy IRIS into a new VPC</strong>. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, bastion hosts, and other infrastructure components. It then deploys IRIS, consisting of two IRIS mirrored nodes and one arbiter node into this new VPC.</p>
 </li>
 <li>
 <p><strong>Deploy IRIS into an existing VPC</strong>. This option provisions IRIS in your existing AWS infrastructure.</p>
@@ -1190,7 +1238,7 @@ aws s3 cp iris.key s3://$BUCKET</code></pre>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Sign in to your AWS account at <a href="https://aws.amazon.com" class="bare">https://aws.amazon.com</a> with an IAM user role that has the necessary permissions. For details, see <a href="#_planning_the_deployment">Planning the deployment</a> earlier in this guide.</p>
+<p>Sign in to your AWS account at <a href="https://aws.amazon.com" class="bare">https://aws.amazon.com</a> with an IAM user role that has the necessary permissions. For details, see <a href="#_planning_the_deployment"><em>Planning the deployment</em></a> earlier in this guide.</p>
 </li>
 <li>
 <p>Make sure that your AWS account is configured correctly, as discussed in the <a href="#_technical_requirements">Technical requirements</a> section.</p>
@@ -1200,41 +1248,6 @@ aws s3 cp iris.key s3://$BUCKET</code></pre>
 </div>
 <div class="sect2">
 <h3 id="_launch_the_quick_start">Launch the Quick Start</h3>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-You are responsible for the cost of the AWS services used while running this Quick Start reference deployment. There is no additional cost for using this Quick Start. For full details, see the pricing pages for each AWS service used by this Quick Start. Prices are subject to change.
-</td>
-</tr>
-</table>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Sign in to your AWS account, and choose one of the following options to launch the AWS CloudFormation template. For help with choosing an option, see <a href="#_deployment_options">deployment options</a> earlier in this guide.</p>
-</li>
-</ol>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="http://qs_launch_link" target="_blank" rel="noopener">Deploy IRIS into a new VPC on AWS</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="http://qs_template_link" target="_blank" rel="noopener">View template</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="http://qs_launch_link" target="_blank" rel="noopener">Deploy IRIS into an existing VPC on AWS</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="http://qs_template_link" target="_blank" rel="noopener">View template</a></p></td>
-</tr>
-</tbody>
-</table>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -1242,17 +1255,37 @@ You are responsible for the cost of the AWS services used while running this Qui
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-If you’re deploying IRIS into an existing VPC, make sure that your VPC has three private subnets in different Availability Zones for the workload instances, and that the subnets aren’t shared. This Quick Start doesn’t support <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html" target="_blank" rel="noopener">shared subnets</a>. These subnets require <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html" target="_blank" rel="noopener">NAT gateways</a> in their route tables, to allow the instances to download packages and software without exposing them to the internet.
+If you’re deploying IRIS into an existing VPC, make sure that your VPC has two private subnets in different Availability Zones for the workload instances and that the subnets aren’t shared. This Quick Start doesn’t support <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html" target="_blank" rel="noopener">shared subnets</a>. These subnets require <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html" target="_blank" rel="noopener">NAT gateways</a> in their route tables to allow the instances to download packages and software without exposing them to the internet. Also make sure that the domain name option in the DHCP options is configured as explained in <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html" target="_blank" rel="noopener">DHCP options sets</a>. You provide your VPC settings when you launch the Quick Start.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Also, make sure that the domain name option in the DHCP options is configured as explained in the <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html" target="_blank" rel="noopener">Amazon VPC documentation</a>. You provide your VPC settings when you launch the Quick Start.</p>
-</div>
-<div class="paragraph">
 <p>Each deployment takes about 20 minutes to complete.</p>
 </div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Sign in to your AWS account, and choose one of the following options to launch the AWS CloudFormation template. For help with choosing an option, see <a href="#_deployment_options">Deployment options</a> earlier in this guide.</p>
+</li>
+</ol>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 75%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://fwd.aws/rzj7E" target="_blank" rel="noopener">Deploy IRIS into a new VPC on AWS</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://fwd.aws/bxyWv" target="_blank" rel="noopener">View template</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://fwd.aws/Av3ER" target="_blank" rel="noopener">Deploy IRIS into an existing VPC on AWS</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://fwd.aws/3YgkD" target="_blank" rel="noopener">View template</a></p></td>
+</tr>
+</tbody>
+</table>
 <div class="olist arabic">
 <ol class="arabic" start="2">
 <li>
@@ -1266,13 +1299,220 @@ If you’re deploying IRIS into an existing VPC, make sure that your VPC has thr
 <p>On the <strong>Create stack</strong> page, keep the default setting for the template URL, and then choose <strong>Next</strong>.</p>
 </li>
 <li>
-<p>On the <strong>Specify stack details</strong> page, change the stack name if needed. Review the parameters for the template. Provide values for the parameters that require input. For all other parameters, review the default settings and customize them as necessary.</p>
+<p>On the <strong>Specify stack details</strong> page, change the stack name if needed. Review the parameters for the template. Provide values for the parameters that require input. For all other parameters, review the default settings and customize them as necessary. For details on each parameter, see the <a href="#_parameter_reference"><em>Parameter reference</em></a> section of this guide. When you finish reviewing and customizing the parameters, choose <strong>Next</strong>.</p>
 </li>
 </ol>
 </div>
-<div class="paragraph">
-<p>In the following tables, parameters are listed by category and described separately for the deployment options. When you finish reviewing and customizing the parameters, choose <strong>Next</strong>.</p>
+<div class="olist arabic">
+<ol class="arabic" start="5">
+<li>
+<p>On the <strong>Configure stack options</strong> page, you can <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html" target="_blank" rel="noopener">specify tags</a> (key-value pairs) for resources in your stack and <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-add-tags.html" target="_blank" rel="noopener">set advanced options</a>. When you’re finished, choose <strong>Next</strong>.</p>
+</li>
+<li>
+<p>On the <strong>Review</strong> page, review and confirm the template settings. Under <strong>Capabilities</strong>, select the two check boxes to acknowledge that the template creates IAM resources and might require the ability to automatically expand macros.</p>
+</li>
+<li>
+<p>Choose <strong>Create stack</strong> to deploy the stack.</p>
+</li>
+<li>
+<p>Monitor the status of the stack. When the status is <strong>CREATE_COMPLETE</strong>, the IRIS deployment is ready.</p>
+</li>
+<li>
+<p>Use the values displayed in the <strong>Outputs</strong> tab for the stack, as shown in <a href="#cfn_outputs">Figure 2</a>, to view the created resources.</p>
+</li>
+</ol>
 </div>
+<div id="cfn_outputs" class="imageblock">
+<div class="content">
+<a class="image" href="images/cfn_outputs.png"><img src="images/cfn_outputs.png" alt="cfn_outputs" width="100%" height="100%"></a>
+</div>
+<div class="title">Figure 2. IRIS outputs after successful deployment</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_post_deployment_steps">Post-deployment steps</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_test_the_deployment">Test the deployment</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Connect to IRIS node 1 using the bastion host (replacing bracketed text).</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ chmod 400 &lt;my-ec2-key&gt;.pem
+$ ssh-add &lt;my-ec2-key&gt;.pem
+$ ssh -J ec2-user@&lt;bastion-public-ip&gt; ec2-user@&lt;node01-private-ip&gt; -L 52773:&lt;node01-private-ip&gt;:52773</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The IRIS Management Portal for the instance should be available at <a href="http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen" class="bare">http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen</a> with the following credentials:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>User: SuperUser</p>
+</li>
+<li>
+<p>Password: &lt;password you entered at stack creation&gt;</p>
+</li>
+</ul>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p>Navigate to <strong>System Administration</strong>, <strong>Configuration</strong>, <strong>Mirror Settings</strong>, <strong>Edit Mirror</strong>.  Make sure that the system is configured with two failover members.</p>
+</li>
+<li>
+<p>Navigate to <strong>System Administration</strong>, <strong>Configuration</strong>, <strong>Local Databases</strong>. Verify that the mirrored database is created and active.</p>
+</li>
+<li>
+<p>Following <a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=AFL_jdbc" target="_blank" rel="noopener">First Look JDBC and InterSystems Databases</a>, validate JDBC connectivity to IRIS using the load balancer. Change the URL variable to the value displayed in the template output, and change the password from <strong>SYS</strong> to the one you selected during setup.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_failover_test">Failover test</h3>
+<div class="paragraph">
+<p>This Quick Start is architected to be highly available. This means that the site remains available in the case of an instance or Availability Zone failure. To verify high availability, follow these steps to simulate a failure and perform a failover test.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>On node 2, navigate to the <strong>Management Portal</strong> (see <a href="#_test_the_deployment">Test the deployment</a> section earlier).</p>
+</li>
+<li>
+<p>Open the <strong>Configuration</strong>, <strong>Edit Mirror</strong> page. At the bottom of the page you should see "This member is the backup. Changes must be made on the primary."</p>
+</li>
+<li>
+<p>Locate the node 1 instance in the Amazon EC2 management dashboard. Its name has the format <code>MyStackName-Node01-1NG&lt;XXXXXX&gt;</code>.</p>
+</li>
+<li>
+<p>Restart the node 1 instance. This will simulate an instance or Availability Zone outage.</p>
+</li>
+<li>
+<p>Reload the node 2 <strong>Edit Mirror</strong> page. The status should change to this: "This member is the primary. Changes will be sent to other members."</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_faq">FAQ</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Q.</strong> I encountered a <strong>CREATE_FAILED</strong> error when I launched the Quick Start.</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> If AWS CloudFormation fails to create the stack, relaunch the template with <strong>Rollback on failure</strong> set to <strong>Disabled</strong>. This setting is under <strong>Advanced</strong> in the AWS CloudFormation console on the <strong>Configure stack options</strong> page. With this setting, the stack’s state is retained, and the instance keeps running so that you can troubleshoot the issue. The log files <code>cloud-init.log</code> and <code>cloud-init-output.log</code> are located at <code>/var/log/</code>.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, you continue to incur AWS charges for this stack. Delete the stack when you finish troubleshooting.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For additional information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html" target="_blank" rel="noopener">Troubleshooting AWS CloudFormation</a> on the AWS website.</p>
+</div>
+<div class="paragraph">
+<p><strong>Q.</strong> I encountered a size limitation error when I deployed the AWS CloudFormation templates.</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> We recommend that you launch the Quick Start templates from the links in this guide or from another S3 bucket. If you deploy the templates from a local copy on your computer or from a location other than an S3 bucket, you might encounter template size limitations. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html" target="_blank" rel="noopener">AWS CloudFormation quotas</a>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Q.</strong> The stack is being created, and I can&#8217;t access IRIS.</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> You probably simply need to wait. It takes approximately two minutes from the moment the EC2 instance status says <strong>CREATE COMPLETED</strong> to the moment IRIS is fully available.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_troubleshooting">Troubleshooting</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The IRIS Management Portal for the instance should be available at <code><a href="http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen" class="bare">http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen</a></code> Credentials - User: SuperUser, and the password you entered at stack creation.
+If the IRIS Management Portal is inaccessible, troubleshooting the IRIS installation can be done from the command line.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>For command-line access, connect to the IRIS nodes using the bastion host (replacing the bracketed text):</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ chmod 400 &lt;my-ec2-key&gt;.pem
+$ ssh-add &lt;my-ec2-key&gt;.pem
+$ ssh -J ec2-user@&lt;bastion-public-ip&gt; ec2-user@&lt;node-private-ip&gt; -L 52773:&lt;node-private-ip&gt;:52773</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p>Connect to the EC2 node instances by using SSH. Verify that IRIS is running:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$iris list</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="3">
+<li>
+<p>If you don&#8217;t see any active IRIS instances, or if the message <code>iris: command not found</code> appears, then IRIS installation has failed. View this log file on the instance to identify any problems with the IRIS installation during instance first start:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$cat /var/log/cloud-init-output.log</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="4">
+<li>
+<p>To connect to the IRIS command prompt use:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ iris session iris</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Consult the <a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM" target="_blank" rel="noopener">InterSystems IRIS Management and Monitoring guide</a>.</p>
+</div>
+<div class="paragraph">
+<p>Contact InterSystems Support.</p>
+</div>
+<div class="paragraph">
+<p>If EC2 instances are not available or reachable, contact AWS Support.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_parameter_reference">Parameter reference</h2>
+<div class="sectionbody">
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1280,16 +1520,16 @@ If you’re deploying IRIS into an existing VPC, make sure that your VPC has thr
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Unless you are customizing the Quick Start templates for your own deployment projects, keep the default settings for the parameters <strong>Quick Start S3 bucket name</strong>, <strong>Quick Start S3 bucket Region</strong>, and <strong>Quick Start S3 key prefix</strong>. Changing these settings automatically updates code references to point to a new Quick Start location. For more information, see the <a href="https://aws-quickstart.github.io/option1.html" target="_blank" rel="noopener">AWS Quick Start Contributor’s Guide</a>.
+Unless you are customizing the Quick Start templates for your own deployment projects, we recommend that you keep the default settings for the parameters labeled <code>Quick Start S3 bucket name</code>, <code>Quick Start S3 bucket
+Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parameter settings automatically updates code references to point to a new Quick Start location. For more information, see the <a href="https://aws-quickstart.github.io/option1.html" target="_blank" rel="noopener">AWS Quick Start Contributor’s Guide</a>.
 </td>
 </tr>
 </table>
 </div>
-</div>
 <div class="sect2">
-<h3 id="_launch_into_a_new_vpc">Launch into a new VPC</h3>
+<h3 id="_parameters_for_deploying_into_a_new_vpc">Parameters for deploying into a new VPC</h3>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. IRIS Configuration</caption>
+<caption class="title">Table 1. IRIS configuration</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -1304,21 +1544,21 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Password for SuperUser/_SYSTEM user
+<td class="tableblock halign-left valign-top"><p class="tableblock">IRIS password
 (<code>IRISPasswordParameter</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Admin Password for IRIS (at least 4 alphanumeric characters)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Password for the IRIS administrator (SuperUser/_SYSTEM user). Use at least 4 alphanumeric characters.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">S3 bucket with IRIS binaries
+<td class="tableblock halign-left valign-top"><p class="tableblock">IRIS S3 bucket name
 (<code>S3BucketNameParameter</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Blank string</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">S3 Bucket with IRIS binaries</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3 bucket with IRIS binaries.</p></td>
 </tr>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. Network Configuration</caption>
+<caption class="title">Table 2. Network configuration</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -1336,42 +1576,42 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 <td class="tableblock halign-left valign-top"><p class="tableblock">Availability Zones
 (<code>AvailabilityZones</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">List of Availability Zones to use for the subnets in the VPC. Note: The logical order is preserved and 3 AZs are used for this deployment.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Availability Zones to use for the subnets in the VPC. The logical order is preserved. This deployment uses 3 Availability Zones.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Allowed CIDR block for external access to the instances
+<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for remote access
 (<code>RemoteAccessCIDRParameter</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>0.0.0.0/0</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Restrict to &lt;your-own-ip&gt;/32 for better security</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allowed CIDR block for external access to the instances. Restrict this to &lt;your-own-ip&gt;/32 for better security.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">VPC CIDR
 (<code>VPCCIDR</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.0.0/16</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR Block for the VPC</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for the VPC.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Private Subnet 1 CIDR
+<td class="tableblock halign-left valign-top"><p class="tableblock">Private subnet 1 CIDR
 (<code>PrivateSubnet1CIDR</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.1.0/24</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for private subnet 1 located in Availability Zone 1.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for the private subnet located in Availability Zone 1.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Private Subnet 2 CIDR
+<td class="tableblock halign-left valign-top"><p class="tableblock">Private subnet 2 CIDR
 (<code>PrivateSubnet2CIDR</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.2.0/24</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for private subnet 2 located in Availability Zone 2.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for the private subnet located in Availability Zone 2.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Private Subnet 3 CIDR
+<td class="tableblock halign-left valign-top"><p class="tableblock">Private subnet 3 CIDR
 (<code>PrivateSubnet3CIDR</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.3.0/24</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for private subnet 3 located in Availability Zone 3.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for the private subnet located in Availability Zone 3.</p></td>
 </tr>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. EC2 Instance Configuration</caption>
+<caption class="title">Table 3. EC2 instance configuration</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -1389,18 +1629,18 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 <td class="tableblock halign-left valign-top"><p class="tableblock">EC2 instance type for IRIS nodes
 (<code>InstanceTypeParameter</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>m5.large</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Cluster node instance type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cluster node instance type.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SSH Key Pair name to connect to EC2 instances
+<td class="tableblock halign-left valign-top"><p class="tableblock">SSH key-pair name to connect to EC2 instances
 (<code>SshKeyParameter</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SSH Keypair to login to the instance</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SSH key pair to log in to the instances.</p></td>
 </tr>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. AWS Quick Start Configuration</caption>
+<caption class="title">Table 4. AWS Quick Start configuration</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -1415,30 +1655,30 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 Bucket Name
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 bucket name
 (<code>QSS3BucketName</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>aws-quickstart</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">S3 bucket name for the IRIS Quick Start assets.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the S3 bucket for your copy of the Quick Start assets. Keep the default name unless you are customizing the template. Changing the name updates code references to point to a new Quick Start location. This name can include numbers, lowercase letters, uppercase letters, and hyphens, but do not start or end with a hyphen (-). See <a href="https://aws-quickstart.github.io/option1.html" class="bare">https://aws-quickstart.github.io/option1.html</a>.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 Key Prefix
-(<code>QSS3KeyPrefix</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quickstart-intersystems-iris/</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">S3 key prefix for the IRIS Quick Start assets.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 Bucket Region
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 bucket Region
 (<code>QSS3BucketRegion</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>us-east-1</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. Keep the default Region unless you are customizing the template. Changing this Region updates code references to point to a new Quick Start location. When using your own bucket, specify the Region. See <a href="https://aws-quickstart.github.io/option1.html" class="bare">https://aws-quickstart.github.io/option1.html</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 key prefix
+(<code>QSS3KeyPrefix</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quickstart-intersystems-iris/</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3 key prefix that is used to simulate a directory for your copy of the Quick Start assets. Keep the default prefix unless you are customizing the template. Changing this prefix updates code references to point to a new Quick Start location. This prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/). See <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html" class="bare">https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html</a> and <a href="https://aws-quickstart.github.io/option1.html" class="bare">https://aws-quickstart.github.io/option1.html</a>.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_launch_into_an_existing_vpc">Launch into an existing VPC</h3>
+<h3 id="_parameters_for_deploying_into_an_existing_vpc">Parameters for deploying into an existing VPC</h3>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. IRIS Configuration</caption>
+<caption class="title">Table 5. IRIS configuration</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -1453,21 +1693,21 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Password for SuperUser/_SYSTEM user
+<td class="tableblock halign-left valign-top"><p class="tableblock">IRIS password
 (<code>IRISPasswordParameter</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Admin Password for IRIS (at least 4 alphanumeric characters)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Password for the IRIS administrator (SuperUser/_SYSTEM user). Use at least 4 alphanumeric characters.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">S3 bucket with IRIS binaries
+<td class="tableblock halign-left valign-top"><p class="tableblock">IRIS S3 bucket name
 (<code>S3BucketNameParameter</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Blank string</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">S3 Bucket with IRIS binaries</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3 bucket with IRIS binaries.</p></td>
 </tr>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. Network Configuration</caption>
+<caption class="title">Table 6. Network configuration</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -1482,27 +1722,27 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Which VPC should this be deployed to?
+<td class="tableblock halign-left valign-top"><p class="tableblock">VPC ID for workload
 (<code>VpcIdParameter</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Launch EC2 instances in this VPC</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID of the VPC to launch EC2 instances into.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Subnets to deploy IRIS
 (<code>InstanceSubnetIdParameter</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3 Subnets in three different Availability Zones</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3 subnets in separate Availability Zones.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Allowed CIDR block for external access to the instances
+<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for remote access
 (<code>RemoteAccessCIDRParameter</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>0.0.0.0/0</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Restrict to &lt;your-own-ip&gt;/32 for better security</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allowed CIDR block for external access to the instances. Restrict this to &lt;your-own-ip&gt;/32 for better security.</p></td>
 </tr>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 7. EC2 Instance Configuration</caption>
+<caption class="title">Table 7. EC2 instance configuration</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -1520,18 +1760,18 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 <td class="tableblock halign-left valign-top"><p class="tableblock">EC2 instance type for IRIS nodes
 (<code>InstanceTypeParameter</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>m5.large</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Cluster node instance type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cluster node instance type.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SSH Key Pair name to connect to EC2 instances
+<td class="tableblock halign-left valign-top"><p class="tableblock">SSH key-pair name to connect to EC2 instances
 (<code>SshKeyParameter</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SSH Keypair to login to the instance</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SSH key pair to log in to the instances.</p></td>
 </tr>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 8. QuickStart Parameters</caption>
+<caption class="title">Table 8. AWS Quick Start configuration</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -1546,197 +1786,25 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>NO_LABEL</strong>
-(<code>QSS3KeyPrefix</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quickstart-intersystems-iris/</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">S3 key prefix for the Quick Start HANA-HA assets.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>NO_LABEL</strong>
-(<code>QSS3BucketRegion</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>us-east-1</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>NO_LABEL</strong>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 bucket name
 (<code>QSS3BucketName</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>aws-quickstart</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">S3 bucket name for the Quick Start IRIS assets.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the S3 bucket for your copy of the Quick Start assets. Keep the default name unless you are customizing the template. Changing the name updates code references to point to a new Quick Start location. This name can include numbers, lowercase letters, uppercase letters, and hyphens, but do not start or end with a hyphen (-). See <a href="https://aws-quickstart.github.io/option1.html" class="bare">https://aws-quickstart.github.io/option1.html</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 bucket Region
+(<code>QSS3BucketRegion</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>us-east-1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. Keep the default Region unless you are customizing the template. Changing this Region updates code references to point to a new Quick Start location. When using your own bucket, specify the Region. See <a href="https://aws-quickstart.github.io/option1.html" class="bare">https://aws-quickstart.github.io/option1.html</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 key prefix
+(<code>QSS3KeyPrefix</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quickstart-intersystems-iris/</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3 key prefix that is used to simulate a directory for your copy of the Quick Start assets. Keep the default prefix unless you are customizing the template. Changing this prefix updates code references to point to a new Quick Start location. This prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/). See <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html" class="bare">https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html</a> and <a href="https://aws-quickstart.github.io/option1.html" class="bare">https://aws-quickstart.github.io/option1.html</a>.</p></td>
 </tr>
 </tbody>
 </table>
-<div class="olist arabic">
-<ol class="arabic" start="5">
-<li>
-<p>On the <strong>Configure stack options</strong> page, you can <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html" target="_blank" rel="noopener">specify tags</a> (key-value pairs) for resources in your stack and <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-add-tags.html" target="_blank" rel="noopener">set advanced options</a>. When you’re finished, choose <strong>Next</strong>.</p>
-</li>
-<li>
-<p>On the <strong>Review</strong> page, review and confirm the template settings. Under <strong>Capabilities</strong>, select the two check boxes to acknowledge that the template creates IAM resources and might require the ability to automatically expand macros.</p>
-</li>
-<li>
-<p>Choose <strong>Create stack</strong> to deploy the stack.</p>
-</li>
-<li>
-<p>Monitor the status of the stack. When the status is <strong>CREATE_COMPLETE</strong>, the IRIS deployment is ready.</p>
-</li>
-<li>
-<p>Use the values displayed in the <strong>Outputs</strong> tab for the stack, as shown in <a href="#cfn_outputs">IRIS outputs after successful deployment</a>, to view the created resources.</p>
-</li>
-</ol>
-</div>
-<div id="cfn_outputs" class="imageblock">
-<div class="content">
-<a class="image" href="images/cfn_outputs.png"><img src="images/cfn_outputs.png" alt="cfn_outputs" width="100%" height="100%"></a>
-</div>
-<div class="title">Figure 2. IRIS outputs after successful deployment</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_post_deployment_steps">Post deployment steps</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_test_the_deployment">Test the deployment</h3>
-<div class="paragraph">
-<p>Establish a connection to IRIS Node01 via the Bastion Host</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ chmod 400 &lt;my-ec2-key&gt;.pem
-$ ssh-add &lt;my-ec2-key&gt;.pem
-$ ssh -J ec2-user@&lt;bastion-public-ip&gt; ec2-user@&lt;node01-private-ip&gt; -L 52773:&lt;node01-private-ip&gt;:52773</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The IRIS Management Portal for the instance should be available at: <a href="http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen" class="bare">http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen</a> with the following credentials:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>User: SuperUser</p>
-</li>
-<li>
-<p>Password: password you entered at stack creation</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Navigate to <em>System Administration | Configuration | Mirror Settings | Edit Mirror</em>. Make sure the system is configured with two Failover members.</p>
-</div>
-<div class="paragraph">
-<p>Verify that the mirrored database is created and active. <em>System Administration | Configuration | Local Databases</em>.</p>
-</div>
-<div class="paragraph">
-<p>Validate the JDBC connection by following the <a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=AFL\_jdbc">First Look JDBC document</a> to validate JDBC connectivity to IRIS via the Load Balancer. Make sure to change the url variable to the value displayed in the template output, and password from 'SYS' to the one you selected during setup.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_failover_test">Failover Test</h3>
-<div class="paragraph">
-<p>On the Node02, navigate to the Management Portal (see &quot;Health Check&quot; section above) and open the Configuration-&amp;gt;Edit Mirror page. At the bottom of the page you will see <em>This member is the backup. Changes must be made on the primary.</em></p>
-</div>
-<div class="paragraph">
-<p>Locate the Node01 instance in the AWS EC2 management dashboard. Its name will be of the format: MyStackName-Node01-1NGXXXXXX</p>
-</div>
-<div class="paragraph">
-<p>Restart the Node01 instance. This will simulate an instance/AZ outage.</p>
-</div>
-<div class="paragraph">
-<p>Reload Node02 'Edit Mirror' page. The status should change to: <em>This member is the primary. Changes will be sent to other members.</em></p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_faq">FAQ</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p><strong>Q.</strong> I encountered a <strong>CREATE_FAILED</strong> error when I launched the Quick Start.</p>
-</div>
-<div class="paragraph">
-<p><strong>A.</strong> If AWS CloudFormation fails to create the stack, we recommend that you relaunch the template with <strong>Rollback on failure</strong> set to <strong>Disabled</strong>. (This setting is under <strong>Advanced</strong> in the AWS CloudFormation console, <strong>Options</strong> page.) With this setting, the stack’s state is retained and the instance is left running, so you can troubleshoot the issue. (For Windows, look at the log files in %ProgramFiles%\Amazon\EC2ConfigService and C:\cfn\log.)</p>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, you continue to incur AWS charges for this stack. Please make sure to delete the stack when you finish troubleshooting.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>For additional information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html" target="_blank" rel="noopener">Troubleshooting AWS CloudFormation</a> on the AWS website.</p>
-</div>
-<div class="paragraph">
-<p><strong>Q.</strong> I encountered a size limitation error when I deployed the AWS CloudFormation templates.</p>
-</div>
-<div class="paragraph">
-<p><strong>A.</strong> We recommend that you launch the Quick Start templates from the links in this guide or from another S3 bucket. If you deploy the templates from a local copy on your computer or from a location other than an S3 bucket, you might encounter template size limitations. For more information about AWS CloudFormation quotas, see the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html" target="_blank" rel="noopener">AWS documentation</a>.</p>
-</div>
-<div class="paragraph">
-<p><strong>Q.</strong> Stack is being created, but I can&#8217;t access IRIS</p>
-</div>
-<div class="paragraph">
-<p>It takes approximately 2 minutes from the moment EC2 instance status turns into CREATE COMPLETED to the moment IRIS is fully available.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_troubleshooting">Troubleshooting</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>For command line access, connect to the IRIS nodes via bastion host:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ chmod 400 &lt;my-ec2-key&gt;.pem
-$ ssh-add &lt;my-ec2-key&gt;.pem
-$ ssh -J ec2-user@&lt;bastion-public-ip&gt; ec2-user@&lt;node-private-ip&gt; -L 52773:&lt;node-private-ip&gt;:52773</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>After that, the IRIS Management Portal for the instance would be available at: <a href="http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen" class="bare">http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen</a> Credentials - User: SuperUser, and the password you entered at stack creation.</p>
-</div>
-<div class="paragraph">
-<p>SSH to the EC2 Node instances and check if IRIS is running:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$iris list</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If you don&#8217;t see any active IRIS instances, or the message 'iris: command not found' appears, then IRIS installation has failed. Check:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$cat /var/log/cloud-init-output.log</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>on the instance to identify any problems with the IRIS installation during instance first start.</p>
-</div>
-<div class="paragraph">
-<p>To connect to the IRIS command prompt use:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ iris session iris</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Consult InterSystems IRIS Management and Monitoring guide: <a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM" class="bare">https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM</a></p>
-</div>
-<div class="paragraph">
-<p>Contact InterSystems Support.</p>
-</div>
-<div class="paragraph">
-<p>If EC2 instances are not available/reachable, contact AWS Support.</p>
 </div>
 </div>
 </div>
@@ -1774,7 +1842,7 @@ and to share your customizations with others.</p>
 <p>This document is provided for informational purposes only. It represents AWS’s current product offerings and practices as of the date of issue of this document, which are subject to change without notice. Customers are responsible for making their own independent assessment of the information in this document and any use of AWS’s products or services, each of which is provided “as is” without warranty of any kind, whether expressed or implied. This document does not create any warranties, representations, contractual commitments, conditions, or assurances from AWS, its affiliates, suppliers, or licensors. The responsibilities and liabilities of AWS to its customers are controlled by AWS agreements, and this document is not part of, nor does it modify, any agreement between AWS and its customers.</p>
 </div>
 <div class="paragraph">
-<p>The software included with this paper is licensed under the Apache License, version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at <a href="http://aws.amazon.com/apache2.0/" class="bare">http://aws.amazon.com/apache2.0/</a> or in the accompanying "license" file. This code is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either expressed or implied. See the License for specific language governing permissions and limitations.</p>
+<p>The software included with this paper is licensed under the Apache License, version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at <a href="http://aws.amazon.com/apache2.0/" target="_blank" rel="noopener">http://aws.amazon.com/apache2.0/</a> or in the accompanying "license" file. This code is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either expressed or implied. See the License for specific language governing permissions and limitations.</p>
 </div>
 </div>
 </div>
@@ -1782,7 +1850,7 @@ and to share your customizations with others.</p>
 <p class="footer-text">
 <!-- We can use document attributes: -->
 <!-- Generated with Asciidoctor v2.0.12. -->
-<a href="https://aws.amazon.com/privacy/">Privacy</a> | <a href="https://aws.amazon.com/terms/">Site terms</a> | &copy; 2020, Amazon Web Services, Inc. or its affiliates and InterSystems Corp.. All rights reserved.
+<a href="https://aws.amazon.com/privacy/">Privacy</a> | <a href="https://aws.amazon.com/terms/">Site terms</a> | &copy; 2021, Amazon Web Services, Inc. or its affiliates and InterSystems Corp.. All rights reserved.
 </p>
 </body>
 </html>
