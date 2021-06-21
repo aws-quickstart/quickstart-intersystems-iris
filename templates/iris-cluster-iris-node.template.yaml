@@ -1,5 +1,6 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
+Description: IRIS Mirror node (qs-1s15se3sc)
 Metadata:
     Author: Anton Umnikov
     Last Updated: November 20, 2020
@@ -104,6 +105,8 @@ Parameters:
     Default: quickstart-intersystems-iris
     Description: S3 key prefix for the Quick Start IRIS assets.
     Type: String
+Conditions:
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
 Resources:
   IRISRole:
     Type: AWS::IAM::Role
@@ -112,11 +115,16 @@ Resources:
         - PolicyDocument:
             Version: '2012-10-17'
             Statement:
-              - Action:
-                  - s3:GetObject
-                  - s3:ListBucket
-                Resource: "*"
-                Effect: Allow
+              - Effect: Allow
+                Action: s3:ListBucket
+                Resource: !Sub
+                  - 'arn:${AWS::Partition}:s3:::${S3Bucket}'
+                  - S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+              - Effect: Allow
+                Action: s3:GetObject
+                Resource: !Sub
+                  - 'arn:${AWS::Partition}:s3:::${S3Bucket}/${QSS3KeyPrefix}*'
+                  - S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
           PolicyName: aws-quick-start-s3-policy
       AssumeRolePolicyDocument:
         Statement:

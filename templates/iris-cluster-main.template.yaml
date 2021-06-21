@@ -225,6 +225,9 @@ Resources:
         S3BucketNameParameter: !Ref S3BucketNameParameter
         InstanceTypeParameter: t3.small
         MirrorInstanceRole: ARBITER
+        QSS3BucketName: !Ref QSS3BucketName
+        QSS3BucketRegion: !Ref QSS3BucketRegion
+        QSS3KeyPrefix: !Ref QSS3KeyPrefix
       TemplateURL:
         !Sub
           - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/iris-cluster-arbiter-node.template.yaml'
