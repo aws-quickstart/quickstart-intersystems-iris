@@ -117,6 +117,11 @@ Conditions:
 Resources:
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: F1000
+            reason: "Standard Amazon practice"
     Properties:
       GroupDescription: Allow all hosts in this group to access each other.
       GroupName: !Sub "${AWS::StackName}-IRIS-SG"
