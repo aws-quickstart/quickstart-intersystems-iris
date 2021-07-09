@@ -3,6 +3,12 @@ Description: This template deploys InterSystems IRIS into a new a VPC, including
   instance and related resources. You will be billed for the AWS resources used if
   you create a stack from this template. (qs-1r5s7urrb)
 Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9002
+        - W9003
+        - W9006
   QuickStartDocumentation:
     EntrypointName: "Parameters for deploying into a new VPC"
     Order: "1"

@@ -2,10 +2,15 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: IRIS Mirror node (qs-1s15se3sc)
 Metadata:
-    Author: Anton Umnikov
-    Last Updated: November 20, 2020
-    Description: IRIS Mirror Node
-
+  Author: Anton Umnikov
+  Last Updated: November 20, 2020
+  Description: IRIS Mirror Node
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9002
+        - W9003
+        - W9006
 Mappings:
 
   IRISParametersMap:
@@ -70,6 +75,7 @@ Parameters:
   LatestAmiId:
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
     Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+    Description: Systems Manager parameter for latest AMI
   MirrorInstanceRole:
     Description: Cluster node instance role
     Type: String
@@ -83,21 +89,20 @@ Parameters:
   MirrorPrimaryIP:
     Type: String
     Default: none
+    Description: Mirror primary IP address
   MirrorArbiterIP:
     Type: String
     Default: none
+    Description: Mirror Arbiter IP address
   MirrorDBName:
     Type: String
     Default: DATA
+    Description: Mirror DB name
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-) but should not end with forward slash (/)
     Default: aws-quickstart
     Description: S3 bucket name for the Quick Start IRIS assets.
-    Type: String
-  QSS3BucketRegion:
-    Default: 'us-east-1'
-    Description: 'The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.'
     Type: String
   QSS3KeyPrefix:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
@@ -247,7 +252,6 @@ Resources:
            #aws s3 cp s3://$BUCKET/iris.service .
            #wget https://isc-tech-validation.s3.amazonaws.com/MirrorInstaller.xml
            #wget https://isc-tech-validation.s3.amazonaws.com/iris.service
-           # ${QSS3BucketRegion}
            # wget https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}scripts/MirrorInstaller.xml
            # wget https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}scripts/iris.service
            aws s3 cp s3://${QSS3BucketName}/${QSS3KeyPrefix}scripts/MirrorInstaller.xml .

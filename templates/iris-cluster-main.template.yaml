@@ -4,6 +4,14 @@ Description: This template deploys InterSystems IRIS
   instance and related resources. You will be billed for the AWS resources used if
   you create a stack from this template. (qs-1r9onjih3)
 Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9002
+        - W9003
+        - W9006
+        - W9901
+        - E9902
   QuickStartDocumentation:
     EntrypointName: "Parameters for deploying into an existing VPC"
     Order: "2"
@@ -189,7 +197,6 @@ Resources:
         MirrorInstanceRole: PRIMARY
         MirrorArbiterIP: !GetAtt 'Arbiter.Outputs.NodePrivateIP'
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
-        QSS3BucketRegion: !Ref QSS3BucketRegion
         QSS3BucketName: !Ref QSS3BucketName
       TemplateURL:
         !Sub
@@ -211,7 +218,6 @@ Resources:
         MirrorInstanceRole: FAILOVER
         MirrorPrimaryIP: !GetAtt 'Node01.Outputs.NodePrivateIP'
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
-        QSS3BucketRegion: !Ref QSS3BucketRegion
         QSS3BucketName: !Ref QSS3BucketName
       TemplateURL:
         !Sub
@@ -231,7 +237,6 @@ Resources:
         InstanceTypeParameter: t3.small
         MirrorInstanceRole: ARBITER
         QSS3BucketName: !Ref QSS3BucketName
-        QSS3BucketRegion: !Ref QSS3BucketRegion
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
       TemplateURL:
         !Sub

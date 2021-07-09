@@ -2,10 +2,15 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: IRIS Arbiter node (qs-1s15se3pg)
 Metadata:
-    Author: Anton Umnikov
-    Last Updated: April 6, 2020
-    Description: IRIS Arbiter Node
-
+  Author: Anton Umnikov
+  Last Updated: April 6, 2020
+  Description: IRIS Arbiter Node
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9002
+        - W9003
+        - W9006
 Parameters:
   #VpcIdParameter:
   #  Description: Launch EC2 instances in this VPC
@@ -35,6 +40,7 @@ Parameters:
   LatestAmiId:
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
     Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+    Description: Systems Manager parameter for latest AMI
   MirrorInstanceRole:
     Description: Cluster node instance role
     Type: String
@@ -50,10 +56,6 @@ Parameters:
     ConstraintDescription: The Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).
     Default: aws-quickstart
     Description: Name of the S3 bucket for your copy of the Quick Start assets. Keep the default name unless you are customizing the template. Changing the name updates code references to point to a new Quick Start location. This name can include numbers, lowercase letters, uppercase letters, and hyphens, but do not start or end with a hyphen (-). See https://aws-quickstart.github.io/option1.html.
-    Type: String
-  QSS3BucketRegion:
-    Default: 'us-east-1'
-    Description: 'AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. Keep the default Region unless you are customizing the template. Changing this Region updates code references to point to a new Quick Start location. When using your own bucket, specify the Region. See https://aws-quickstart.github.io/option1.html.'
     Type: String
   QSS3KeyPrefix:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
