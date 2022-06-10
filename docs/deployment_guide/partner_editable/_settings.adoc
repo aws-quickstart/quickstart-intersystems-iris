@@ -3,8 +3,8 @@
 :partner-product-name: IRIS
 :partner-product-short-name: IRIS
 :partner-company-name: InterSystems Corp.
-:doc-month: June
-:doc-year: 2022
+:doc-month: February
+:doc-year: 2021
 :partner-contributors: Steve LeBlanc, {partner-company-name}
 // :other-contributors: Akua Mansa, Trek10
 // :aws-contributors: Janine Singh, AWS IoT Partner team
