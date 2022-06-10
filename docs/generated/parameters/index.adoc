@@ -1,6 +1,0 @@
-
-=== Launch into a new VPC
-include::iris-entrypoint-new-vpc.template.adoc[]
-
-=== Launch into an existing VPC
-include::iris-cluster-main.template.adoc[]

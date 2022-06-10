@@ -1,5 +1,5 @@
-// Include details about the license and how they can sign up. If no license is required, clarify that. 
+// Include details about any licenses and how to sign up. Provide links as appropriate.
 
-//dublicae of pre-req information?
+There is no cost to use this Quick Start, but you will be billed for any AWS services or resources that this Quick Start deploys. For more information, refer to the https://fwd.aws/rA69w?[AWS Quick Start General Information Guide^].
 
 This deployment requires a noncontainer version of an InterSystems IRIS license key. If you're an InterSystems customer, you can use your IRIS license key (iris.key) if you have one or request one by using the https://evaluation.intersystems.com/[IRIS Evaluation Service^]. Otherwise, https://www.intersystems.com/who-we-are/contact-us/[contact InterSystems^].

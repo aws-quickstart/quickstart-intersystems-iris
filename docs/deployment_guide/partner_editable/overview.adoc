@@ -1,9 +1,9 @@
-// Replace the content in <>
-// Identify your target audience and explain how/why they would use this Quick Start.
-//Avoid borrowing text from third-party websites (copying text from AWS service documentation is fine). Also, avoid marketing-speak, focusing instead on the technical aspect.
-
-This guide provides instructions for deploying the {partner-product-name} Quick Start reference architecture on the AWS Cloud.
+This Quick Start deploys {partner-product-name} on the AWS Cloud. If you are unfamiliar with AWS Quick Starts, refer to the https://fwd.aws/rA69w?[AWS Quick Start General Information Guide^].
 
 The InterSystems IRIS data platform, used mainly in healthcare and financial services, supports rapid ingestion of data from various sources and sophisticated analytics. This Quick Start is for users who want to install IRIS on their own AWS account according to InterSystems and AWS best practices. 
 
 With the InterSystems IRIS data platform, you can build high-performance, machine learning applications that connect data and application silos. Specifically, IRIS is a database engine that supports transactional-analytic applications. Transactional applications deal with real-time data. Analytic applications deal with historical (non-real-time) data. Transactional-analytic applications make it possible for organizations to use insights gleaned from both real-time and historical data.
+
+// For advanced information about the product that this Quick Start deploys, refer to the https://{quickstart-github-org}.github.io/{quickstart-project-name}/operational/index.html[Operational Guide^].
+
+// For information about using this Quick Start for migrations, refer to the https://{quickstart-github-org}.github.io/{quickstart-project-name}/migration/index.html[Migration Guide^].

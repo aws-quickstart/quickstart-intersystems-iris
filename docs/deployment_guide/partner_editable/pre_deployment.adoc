@@ -1,11 +1,14 @@
-==== Acquire {partner-product-name} binaries files and license key
+//Include any predeployment steps here, such as signing up for a Marketplace AMI or making any changes to a partner account. If there are no predeployment steps, leave this file empty.
+
+== Predeployment steps
+
+=== Acquire {partner-product-name} binaries files and license key
 
 . Acquire the two InterSystems IRIS binaries files. They're available to InterSystems customers at https://wrc.intersystems.com/. Log in with your InterSystems Worldwide Response Center (WRC) credentials and follow the links to **Actions**, **SW Distributions**, **InterSystems IRIS**. This Quick Start deployment guide is written for the InterSystems IRIS 2020.1 build 215. IRIS binaries file names have the format `ISCAgent-2020.1.0.215.0-lnxrhx64.tar.gz` and `IRIS-2020.1.0.215.1-lnxrhx64.tar.gz`.
 
 . If you don't already have one, acquire an IRIS license key (iris.key). For details, see the <<Software licenses>> section.
 
-
-==== Prepare for the deployment
+=== Prepare for the deployment
 
 . Create an S3 bucket or select an existing S3 bucket where you'd like to put the two binaries files and your IRIS license key. Note this S3 bucket name; during deployment you will enter it for `S3BucketNameParameter`. 
 . Upload the two IRIS binaries files and your IRIS license key to the S3 bucket (replacing the bracketed text with your bucket name):

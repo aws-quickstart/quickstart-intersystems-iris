@@ -1,0 +1,40 @@
+The IRIS Management Portal for the instance should be available at `http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen` Credentials - User: SuperUser, and the password you entered at stack creation.
+If the IRIS Management Portal is inaccessible, troubleshooting the IRIS installation can be done from the command line.
+
+. For command-line access, connect to the IRIS nodes using the bastion host (replacing the bracketed text):
+
+[source,bash]
+----
+$ chmod 400 <my-ec2-key>.pem
+$ ssh-add <my-ec2-key>.pem
+$ ssh -J ec2-user@<bastion-public-ip> ec2-user@<node-private-ip> -L 52773:<node-private-ip>:52773
+----
+
+[start=2]
+. Connect to the EC2 node instances by using SSH. Verify that IRIS is running:
+
+[source,bash]
+$iris list
+
+[start=3]
+. If you don't see any active IRIS instances, or if the message `iris: command not found` appears, then IRIS installation has failed. View this log file on the instance to identify any problems with the IRIS installation during instance first start:
+
+[source,bash]
+$cat /var/log/cloud-init-output.log
+
+[start=4]
+. To connect to the IRIS command prompt use:
+
+[source,bash]
+$ iris session iris
+
+Consult the https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM[InterSystems IRIS Management and Monitoring guide^].
+
+Contact InterSystems Support.
+
+If EC2 instances are not available or reachable, contact AWS Support. 
+
+For troubleshooting common Quick Start issues, refer to the https://fwd.aws/rA69w?[AWS Quick Start General Information Guide^] and https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html[Troubleshooting CloudFormation^].
+
+// == Resources
+// Uncomment section and add links to any external resources that are specified by the partner.
